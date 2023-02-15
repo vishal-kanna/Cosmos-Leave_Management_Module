@@ -1,3 +1,18 @@
 syntax="proto3";
 package cosmos.lms.v1beta1;
-option go_package="x/lms/types";
+option go_package="x/lms/types";    
+import "google/api/annotations.proto" ;                                                                                                                                                                                                                                                                                                                                                                       
+// import "cosmos/query/v1/query.proto";
+service query{
+    rpc ListAllTheLeaves(ListAllTheLeavesRequest)returns(ListAllTheLeavesResponse){
+        // option (proto.cosmos.query.v1.module_query_safe) = true;
+        option (google.api.http).get   = "/cosmos/lms/v1beta1/leaveid";
+    }
+    rpc ListAllTheStudent(ListAllTheStudentRequest)returns(ListAllTheStudentResponse){
+        option (google.api.http).get   = "/cosmos/lms/v1beta1/studentid";
+    }
+}
+message ListAllTheLeavesRequest{}
+message ListAllTheLeavesResponse{}
+message ListAllTheStudentResponse{}
+message ListAllTheStudentRequest{}

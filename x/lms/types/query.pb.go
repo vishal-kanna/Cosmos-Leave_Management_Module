@@ -4,9 +4,17 @@
 package types
 
 import (
+	context "context"
 	fmt "fmt"
+	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
+	io "io"
 	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -20,15 +28,723 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type ListAllTheLeavesRequest struct {
+}
+
+func (m *ListAllTheLeavesRequest) Reset()         { *m = ListAllTheLeavesRequest{} }
+func (m *ListAllTheLeavesRequest) String() string { return proto.CompactTextString(m) }
+func (*ListAllTheLeavesRequest) ProtoMessage()    {}
+func (*ListAllTheLeavesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4aaac713669af5ad, []int{0}
+}
+func (m *ListAllTheLeavesRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAllTheLeavesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAllTheLeavesRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAllTheLeavesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllTheLeavesRequest.Merge(m, src)
+}
+func (m *ListAllTheLeavesRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAllTheLeavesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllTheLeavesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllTheLeavesRequest proto.InternalMessageInfo
+
+type ListAllTheLeavesResponse struct {
+}
+
+func (m *ListAllTheLeavesResponse) Reset()         { *m = ListAllTheLeavesResponse{} }
+func (m *ListAllTheLeavesResponse) String() string { return proto.CompactTextString(m) }
+func (*ListAllTheLeavesResponse) ProtoMessage()    {}
+func (*ListAllTheLeavesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4aaac713669af5ad, []int{1}
+}
+func (m *ListAllTheLeavesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAllTheLeavesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAllTheLeavesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAllTheLeavesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllTheLeavesResponse.Merge(m, src)
+}
+func (m *ListAllTheLeavesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAllTheLeavesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllTheLeavesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllTheLeavesResponse proto.InternalMessageInfo
+
+type ListAllTheStudentResponse struct {
+}
+
+func (m *ListAllTheStudentResponse) Reset()         { *m = ListAllTheStudentResponse{} }
+func (m *ListAllTheStudentResponse) String() string { return proto.CompactTextString(m) }
+func (*ListAllTheStudentResponse) ProtoMessage()    {}
+func (*ListAllTheStudentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4aaac713669af5ad, []int{2}
+}
+func (m *ListAllTheStudentResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAllTheStudentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAllTheStudentResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAllTheStudentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllTheStudentResponse.Merge(m, src)
+}
+func (m *ListAllTheStudentResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAllTheStudentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllTheStudentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllTheStudentResponse proto.InternalMessageInfo
+
+type ListAllTheStudentRequest struct {
+}
+
+func (m *ListAllTheStudentRequest) Reset()         { *m = ListAllTheStudentRequest{} }
+func (m *ListAllTheStudentRequest) String() string { return proto.CompactTextString(m) }
+func (*ListAllTheStudentRequest) ProtoMessage()    {}
+func (*ListAllTheStudentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4aaac713669af5ad, []int{3}
+}
+func (m *ListAllTheStudentRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAllTheStudentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAllTheStudentRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAllTheStudentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllTheStudentRequest.Merge(m, src)
+}
+func (m *ListAllTheStudentRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAllTheStudentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllTheStudentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllTheStudentRequest proto.InternalMessageInfo
+
+func init() {
+	proto.RegisterType((*ListAllTheLeavesRequest)(nil), "cosmos.lms.v1beta1.ListAllTheLeavesRequest")
+	proto.RegisterType((*ListAllTheLeavesResponse)(nil), "cosmos.lms.v1beta1.ListAllTheLeavesResponse")
+	proto.RegisterType((*ListAllTheStudentResponse)(nil), "cosmos.lms.v1beta1.ListAllTheStudentResponse")
+	proto.RegisterType((*ListAllTheStudentRequest)(nil), "cosmos.lms.v1beta1.ListAllTheStudentRequest")
+}
+
 func init() { proto.RegisterFile("cosmos/lms/v1beta1/query.proto", fileDescriptor_4aaac713669af5ad) }
 
 var fileDescriptor_4aaac713669af5ad = []byte{
-	// 110 bytes of a gzipped FileDescriptorProto
+	// 277 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4b, 0xce, 0x2f, 0xce,
 	0xcd, 0x2f, 0xd6, 0xcf, 0xc9, 0x2d, 0xd6, 0x2f, 0x33, 0x4c, 0x4a, 0x2d, 0x49, 0x34, 0xd4, 0x2f,
 	0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x82, 0xc8, 0xeb, 0xe5,
-	0xe4, 0x16, 0xeb, 0x41, 0xe5, 0x9d, 0x54, 0x4f, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1,
-	0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e,
-	0x21, 0x8a, 0xbb, 0x02, 0x6c, 0x50, 0x49, 0x65, 0x41, 0x6a, 0x71, 0x12, 0x1b, 0xd8, 0x04, 0x63,
-	0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x98, 0x8a, 0xab, 0xf5, 0x63, 0x00, 0x00, 0x00,
+	0xe4, 0x16, 0xeb, 0x41, 0xe5, 0xa5, 0x64, 0xd2, 0xf3, 0xf3, 0xd3, 0x73, 0x52, 0xf5, 0x13, 0x0b,
+	0x32, 0xf5, 0x13, 0xf3, 0xf2, 0xf2, 0x4b, 0x12, 0x4b, 0x32, 0xf3, 0xf3, 0x8a, 0x21, 0x3a, 0x94,
+	0x24, 0xb9, 0xc4, 0x7d, 0x32, 0x8b, 0x4b, 0x1c, 0x73, 0x72, 0x42, 0x32, 0x52, 0x7d, 0x52, 0x13,
+	0xcb, 0x52, 0x8b, 0x83, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x94, 0xa4, 0xb8, 0x24, 0x30, 0xa5,
+	0x8a, 0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0x95, 0xa4, 0xb9, 0x24, 0x11, 0x72, 0xc1, 0x25, 0xa5, 0x29,
+	0xa9, 0x79, 0x25, 0x70, 0x49, 0x14, 0x8d, 0x70, 0x49, 0xb0, 0xa1, 0x46, 0xdb, 0x98, 0xb8, 0x58,
+	0xc1, 0x2e, 0x16, 0x9a, 0xc4, 0xc8, 0x25, 0x80, 0x6e, 0xbe, 0x90, 0xb6, 0x1e, 0xa6, 0x0f, 0xf4,
+	0x70, 0x38, 0x50, 0x4a, 0x87, 0x38, 0xc5, 0x50, 0x57, 0x29, 0x37, 0x5d, 0x7e, 0x32, 0x99, 0x49,
+	0x56, 0x48, 0x5a, 0x1f, 0x4b, 0x20, 0xe6, 0x80, 0xd4, 0x66, 0xa6, 0x08, 0x4d, 0x67, 0xe4, 0x12,
+	0xc4, 0x70, 0xbb, 0x10, 0x01, 0x8b, 0x50, 0xbd, 0x28, 0xa5, 0x4b, 0xa4, 0x6a, 0xa8, 0xbb, 0x54,
+	0xc1, 0xee, 0x92, 0x17, 0x92, 0xc5, 0xe6, 0xae, 0x62, 0x88, 0xe2, 0xcc, 0x14, 0x27, 0xd5, 0x13,
+	0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0x7c, 0xf0, 0x48, 0x8e, 0x71, 0xc2, 0x63, 0x39, 0x86,
+	0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0xe2, 0xae, 0x00, 0x6b, 0x29, 0xa9, 0x2c,
+	0x48, 0x2d, 0x4e, 0x62, 0x03, 0x47, 0xab, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x63, 0xa0, 0xc3,
+	0x15, 0x2a, 0x02, 0x00, 0x00,
 }
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// QueryClient is the client API for Query service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type QueryClient interface {
+	ListAllTheLeaves(ctx context.Context, in *ListAllTheLeavesRequest, opts ...grpc.CallOption) (*ListAllTheLeavesResponse, error)
+	ListAllTheStudent(ctx context.Context, in *ListAllTheStudentRequest, opts ...grpc.CallOption) (*ListAllTheStudentResponse, error)
+}
+
+type queryClient struct {
+	cc grpc1.ClientConn
+}
+
+func NewQueryClient(cc grpc1.ClientConn) QueryClient {
+	return &queryClient{cc}
+}
+
+func (c *queryClient) ListAllTheLeaves(ctx context.Context, in *ListAllTheLeavesRequest, opts ...grpc.CallOption) (*ListAllTheLeavesResponse, error) {
+	out := new(ListAllTheLeavesResponse)
+	err := c.cc.Invoke(ctx, "/cosmos.lms.v1beta1.query/ListAllTheLeaves", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ListAllTheStudent(ctx context.Context, in *ListAllTheStudentRequest, opts ...grpc.CallOption) (*ListAllTheStudentResponse, error) {
+	out := new(ListAllTheStudentResponse)
+	err := c.cc.Invoke(ctx, "/cosmos.lms.v1beta1.query/ListAllTheStudent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// QueryServer is the server API for Query service.
+type QueryServer interface {
+	ListAllTheLeaves(context.Context, *ListAllTheLeavesRequest) (*ListAllTheLeavesResponse, error)
+	ListAllTheStudent(context.Context, *ListAllTheStudentRequest) (*ListAllTheStudentResponse, error)
+}
+
+// UnimplementedQueryServer can be embedded to have forward compatible implementations.
+type UnimplementedQueryServer struct {
+}
+
+func (*UnimplementedQueryServer) ListAllTheLeaves(ctx context.Context, req *ListAllTheLeavesRequest) (*ListAllTheLeavesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAllTheLeaves not implemented")
+}
+func (*UnimplementedQueryServer) ListAllTheStudent(ctx context.Context, req *ListAllTheStudentRequest) (*ListAllTheStudentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAllTheStudent not implemented")
+}
+
+func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
+	s.RegisterService(&_Query_serviceDesc, srv)
+}
+
+func _Query_ListAllTheLeaves_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAllTheLeavesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListAllTheLeaves(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cosmos.lms.v1beta1.query/ListAllTheLeaves",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListAllTheLeaves(ctx, req.(*ListAllTheLeavesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ListAllTheStudent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAllTheStudentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ListAllTheStudent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cosmos.lms.v1beta1.query/ListAllTheStudent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ListAllTheStudent(ctx, req.(*ListAllTheStudentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Query_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "cosmos.lms.v1beta1.query",
+	HandlerType: (*QueryServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ListAllTheLeaves",
+			Handler:    _Query_ListAllTheLeaves_Handler,
+		},
+		{
+			MethodName: "ListAllTheStudent",
+			Handler:    _Query_ListAllTheStudent_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "cosmos/lms/v1beta1/query.proto",
+}
+
+func (m *ListAllTheLeavesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAllTheLeavesRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAllTheLeavesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ListAllTheLeavesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAllTheLeavesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAllTheLeavesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ListAllTheStudentResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAllTheStudentResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAllTheStudentResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *ListAllTheStudentRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAllTheStudentRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAllTheStudentRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
+	offset -= sovQuery(v)
+	base := offset
+	for v >= 1<<7 {
+		dAtA[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	dAtA[offset] = uint8(v)
+	return base
+}
+func (m *ListAllTheLeavesRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ListAllTheLeavesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ListAllTheStudentResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *ListAllTheStudentRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func sovQuery(x uint64) (n int) {
+	return (math_bits.Len64(x|1) + 6) / 7
+}
+func sozQuery(x uint64) (n int) {
+	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *ListAllTheLeavesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAllTheLeavesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAllTheLeavesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListAllTheLeavesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAllTheLeavesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAllTheLeavesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListAllTheStudentResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAllTheStudentResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAllTheStudentResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListAllTheStudentRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAllTheStudentRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAllTheStudentRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipQuery(dAtA []byte) (n int, err error) {
+	l := len(dAtA)
+	iNdEx := 0
+	depth := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if dAtA[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+		case 1:
+			iNdEx += 8
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if length < 0 {
+				return 0, ErrInvalidLengthQuery
+			}
+			iNdEx += length
+		case 3:
+			depth++
+		case 4:
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupQuery
+			}
+			depth--
+		case 5:
+			iNdEx += 4
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthQuery
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
+	}
+	return 0, io.ErrUnexpectedEOF
+}
+
+var (
+	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowQuery          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupQuery = fmt.Errorf("proto: unexpected end of group")
+)

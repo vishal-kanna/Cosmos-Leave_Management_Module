@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	_ sdk.Msg = &StudentSignup{}
+	_ sdk.Msg = &Red
 	_ sdk.Msg = &MsgMultiSend{}
 	_ sdk.Msg = &MsgUpdateParams{}
 
