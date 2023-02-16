@@ -8,10 +8,6 @@ import (
 
 type Keeper struct {
 	storeKey storetypes.StoreKey
-																																																																							
+
 	cdc codec.Codec
 }
-
-// func (k BaseKeeper) SetStudent(ctx sdk.Context, name string, id string, email string, passwd string) {
-// 	store :=
-// }

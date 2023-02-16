@@ -14,22 +14,25 @@ import (
 
 type msgServer struct {
 	Keeper
+	StudentKeeper
 }
 
 // var _ types.MsgServer = msgServer{}
 
 var _ types.MsgServer = msgServer{}
 
-func (k msgServer) AddStudent(context.Context, *types.AddStudentRequest) (*types.AddStudentResponse, error) {
+func (k msgServer) AddStudent(ctx context.Context, req *types.AddStudentRequest) (*types.AddStudentResponse, error) {
 	return &types.AddStudentResponse{}, nil
 }
 
-func (k msgServer) RegisterAdmin(context.Context, *types.RegisterAdminRequest) (*types.RegisterAdminResponse, error) {
+func (k msgServer) RegisterAdmin(ctx context.Context, req *types.RegisterAdminRequest) (*types.RegisterAdminResponse, error) {
 	return &types.RegisterAdminResponse{}, nil
 }
-func (k msgServer) ApplyLeave(context.Context, *types.ApplyLeaveRequest) (*types.ApplyLeaveResponse, error) {
+func (k msgServer) ApplyLeave(ctx context.Context, req *types.ApplyLeaveRequest) (*types.ApplyLeaveResponse, error) {
+	// k.AcceptLeave(ctx, req)
+	StudentKeeper.AcceptLeaves(ctx, req)
 	return &types.ApplyLeaveResponse{}, nil
 }
-func (k msgServer) AcceptLeave(context.Context, *types.AcceptLeaveRequest) (*types.AcceptLeaveResponse, error) {
+func (k msgServer) AcceptLeave(ctx context.Context, req *types.AcceptLeaveRequest) (*types.AcceptLeaveResponse, error) {
 	return &types.AcceptLeaveResponse{}, nil
 }
