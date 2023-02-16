@@ -11,3 +11,12 @@ type Keeper struct {
 
 	cdc codec.Codec
 }
+
+//NewKeeper creates a new Student Keeper instance
+
+func NewKeeper(key storetypes.StoreKey, cdc codec.Codec) Keeper {
+	return Keeper{
+		cdc:      cdc,
+		storeKey: key,
+	}
+}
