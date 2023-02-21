@@ -7,9 +7,13 @@ import (
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	// "github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/store"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
+	dbm "github.com/tendermint/tm-db"
 )
 
 // Keeper
@@ -25,23 +29,28 @@ func TestKeeperTestSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 	fmt.Println("hello2")
 }
-func (s *TestSuite) SetUpTest() {
+func (s *TestSuite) SetupTest() {
+	db := dbm.NewMemDB()
 
-	fmt.Println("setup function called")
-	s.ctx = sdk.Context{}
-	s.cdc = &codec.ProtoCodec{}
-	s.lmskeeper = keeper.NewKeeper(
-		sdk.NewKVStoreKey(types.StoreKey),
-		s.cdc,
-	)
+	cms := store.NewCommitMultiStore(db)
+	encCfg := simapp.MakeTestEncodingConfig()
+	lmsKey := sdk.NewKVStoreKey(types.StoreKey)
+	ctx := testutil.DefaultContext(lmsKey, sdk.NewTransientStoreKey("transient_test"))
+	keeper := keeper.NewKeeper(lmsKey, encCfg.Codec)
+	cms.MountStoreWithDB(lmsKey, storetypes.StoreTypeIAVL, db)
+	s.Require().NoError(cms.LoadLatestVersion())
+	s.lmskeeper = keeper
+	s.ctx = ctx
 }
 
-func (s *TestSuite) TestAdminRegister(t *testing.T) {
+func (s *TestSuite) TestAdminRegister() {
 	fmt.Println("T")
+	acc := sdk.AccAddress("sadfasd")
+	// s.Require().NoError(err)
+
 	req := types.RegisterAdminRequest{
 		Name:    "vishal",
-		Address: "123",
+		Address: acc.String(),
 	}
-	ctx := sdk.Context{}
-	s.lmskeeper.AdminRegister(ctx, &req)
+	s.lmskeeper.AdminRegister(s.ctx, &req)
 }

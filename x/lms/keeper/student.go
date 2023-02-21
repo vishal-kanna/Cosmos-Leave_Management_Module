@@ -12,6 +12,7 @@ func (k Keeper) AdminRegister(ctx sdk.Context, req *types.RegisterAdminRequest) 
 	if _, err := sdk.AccAddressFromBech32(req.Address); err != nil {
 		panic(fmt.Errorf("invalid admin address %w", err))
 	}
+	// sdk.AccAddressFromBech32()
 	store := ctx.KVStore(k.storeKey)
 	bz, err := k.cdc.Marshal(req)
 	if err != nil {
@@ -43,3 +44,4 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) error {
 	return nil
 }
+func (k Keeper)GetData()
