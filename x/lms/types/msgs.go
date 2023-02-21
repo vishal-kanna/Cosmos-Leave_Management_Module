@@ -64,7 +64,7 @@ func (msg AddStudentRequest) GetSigners() []sdk.AccAddress {
 }
 
 func NewApplyLeaveRequest(address string, reason string, from time.Time, to time.Time) *ApplyLeaveRequest {
-	return &ApplyLeaveRequest{Address: address, Reason: reason, From: from.AddDate(), To: to}
+	return &ApplyLeaveRequest{Address: address, Reason: reason, From: &from, To: &to}
 }
 func (msg ApplyLeaveRequest) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Address); err != nil {

@@ -28,16 +28,20 @@ func (k msgServer) AddStudent(ctx context.Context, req *types.AddStudentRequest)
 
 func (k msgServer) RegisterAdmin(goctx context.Context, req *types.RegisterAdminRequest) (*types.RegisterAdminResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
-	Keeper.AdminRegister(ctx, req)
+	// err := Keeper.AdminRegister(ctx, &req)
+	k.AdminRegister(ctx, req)
+
 	return &types.RegisterAdminResponse{}, nil
 }
+
 func (k msgServer) ApplyLeave(goctx context.Context, req *types.ApplyLeaveRequest) (*types.ApplyLeaveResponse, error) {
 	// k.AcceptLeave(ctx, req)
 	ctx := sdk.UnwrapSDKContext(goctx)
-	Keeper.AcceptLeaves(ctx, req)
+	k.ApplyLeaves(ctx, req)
 	return &types.ApplyLeaveResponse{}, nil
 }
 func (k msgServer) AcceptLeave(goctx context.Context, req *types.AcceptLeaveRequest) (*types.AcceptLeaveResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
+	k.AcceptLeave(ctx, req)
 	return &types.AcceptLeaveResponse{}, nil
 }
