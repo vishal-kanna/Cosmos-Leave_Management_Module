@@ -11,6 +11,7 @@ var (
 	AdminKey   = []byte{0x01}
 	StudentKey = []byte{0x02}
 	LeaveKey   = []byte{0x03}
+	LeaveId    = []byte{0x04}
 )
 
 func StudentStoreId(studentid string) []byte {
@@ -24,8 +25,15 @@ func AdminstoreId(admin string) []byte {
 	copy(key, AdminKey)
 	copy(key[len(AdminKey):], []byte(admin))
 	return key
-	// AdminKey = append(AdminKey, byte(admin))
 }
-// func leaveId(levid int) []byte {
+func LeaveStoreId(leaveid string) []byte {
+	key := make([]byte, len(LeaveKey)+len(leaveid))
+	copy(key, LeaveKey)
+	copy(key[len(LeaveKey):], []byte(leaveid))
+	return key
+}
 
-// }
+func LeaveKeyStoreId(leave int) []byte {
+	LeaveId = append(LeaveId, byte(leave))
+	return LeaveId
+}
