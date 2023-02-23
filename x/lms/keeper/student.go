@@ -4,6 +4,7 @@ import (
 	"clms/x/lms/types"
 	"fmt"
 	"log"
+	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	// "google.golang.org/genproto/googleapis/actions/sdk/v2"
@@ -24,6 +25,7 @@ func (k Keeper) AdminRegister(ctx sdk.Context, req *types.RegisterAdminRequest) 
 	} else {
 		// fmt.Println("Admin added successfullly")
 		store.Set(types.AdminstoreId(req.Address), bz)
+
 	}
 	return nil
 }
@@ -33,19 +35,50 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 		panic(fmt.Errorf("invalid bank authority address: %w", err))
 	}
 	store := ctx.KVStore(k.storeKey)
-
-	req.Status = types.LeaveStatus_STATUS_ACCEPTED
-	bz, err := k.cdc.Marshal(req)
-	if err != nil {
-		return err
+	adminpresent := store.Get(types.AdminstoreId(req.Admin))
+	if adminpresent == nil {
+		req.Status = types.LeaveStatus_STATUS_UNDEFINED
+		marshalldata, err := k.cdc.Marshal(req)
+		if err != nil {
+			log.Println(err)
+		} else {
+			//we need to check whether the student is requested leave or not
+			//as well as we need to check whether the student is added by the register admin
+			val := store.Get(types.StudentStoreId(req.StudentId))
+			if val == nil {
+				fmt.Println("store not present in the student store")
+			}
+			leaveval := store.Get(types.LeaveStoreId(req.StudentId))
+			if leaveval == nil {
+				fmt.Println("student did not request the leave")
+			}
+		}
+		// store.Set(types.StudentStoreId())
 	} else {
-		store.Set(types.StudentStoreId(req.Admin), bz)
-		fmt.Println("Admin is registered")
+		req.Status = types.LeaveStatus_STATUS_ACCEPTED
+		marshaldata := store.Get(types.LeaveStoreId(req.StudentId))
+		// store.Delete()
+		if marshaldata == nil {
+
+		} else {
+
+		}
 	}
+	// req.Status = types.LeaveStatus_STATUS_ACCEPTED
+	// bz, err := k.cdc.Marshal(req)
+	// if err != nil {
+	// 	return err
+	// } else {
+	// 	store.Set(types.StudentStoreId(req.Admin), bz)
+	// 	fmt.Println("Admin is registered")
+	// }
+	// return nil
 	return nil
 }
 func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool {
 	store := ctx.KVStore(k.storeKey)
+	//checking whether student is added by the admin or not
+	//if student is added then we will get the byte array
 	val := store.Get(types.StudentStoreId(req.Address))
 	if val == nil {
 		fmt.Println("Student did not added by the admin")
@@ -55,24 +88,43 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 		if err != nil {
 			log.Println(err)
 		} else {
-			type leaveid struct {
-				Id             int
-				StudentAddress string
-			}
-			studentleave := leaveid{
-				Id:             0,
-				StudentAddress: req.Address,
-			}
-			val := store.Get(types.LeaveKeyStoreId(studentleave.Id))
+			var counter int
+			counter = 0
+			//val stores the byte array if the corressponding key is present in the prefix LeaveKeyId
+			val := store.Get(types.LeaveKeyStoreId(req.Address))
 			if val == nil {
-				// k.cdc.Unmarshal(val)
-				
-			} else {
+				counter++
+				//marshall the counter
+				InttoString := strconv.Itoa(counter)
+				// marhshallcounter, err := k.cdc.Marshal(InttoString)
 
+				//to better understand LeaveStoreId store the respective studnet leave data
+				store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
+				//Need to change this because here Im manually converting the string into the
+				//to better understand LeaveKeyStoreId store the respective studnet counter
+
+				store.Set(types.LeaveKeyStoreId(req.Address), []byte(InttoString))
+			} else {
+				//if we do not get the nil means the student address already present in the array
+				//so we need to get the student id from the leaveKeyStoreId and increment the counter
+				val := store.Get(types.LeaveKeyStoreId(req.Address))
+				ans := string(val)
+				a, err := strconv.Atoi(ans)
+				if err != nil {
+					log.Println(err)
+				} else {
+					a++
+					//convert it to string
+					s := strconv.Itoa(a)
+					store.Set(types.LeaveKeyStoreId(req.Address), []byte(s))
+					store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
+				}
+				// k.cdc.Unmarshal(val, &res)
 			}
 			store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
 		}
 	}
+	return true
 }
 func (k Keeper) CheckStudent(ctx sdk.Context, req *types.ApplyLeaveRequest) bool {
 	store := ctx.KVStore(k.storeKey)

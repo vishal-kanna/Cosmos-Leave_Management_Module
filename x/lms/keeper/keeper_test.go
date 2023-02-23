@@ -29,9 +29,9 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 func (s *TestSuite) SetupTest() {
 	db := dbm.NewMemDB()
-	i := 0
-	fmt.Println("the i value is ", i)
-	i++
+	// i := 0
+	// fmt.Println("the i value is ", i)
+	// i++
 	cms := store.NewCommitMultiStore(db)
 	encCfg := simapp.MakeTestEncodingConfig()
 	lmsKey := sdk.NewKVStoreKey(types.StoreKey)

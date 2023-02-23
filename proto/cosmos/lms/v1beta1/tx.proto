@@ -64,7 +64,7 @@ message AcceptLeaveRequest {
 
     string admin = 1;
     
-    uint64 leave_id = 2;
+    string student_id = 2;
     
     LeaveStatus status = 3;
 }
