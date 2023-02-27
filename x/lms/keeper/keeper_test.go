@@ -125,29 +125,3 @@ func (s *TestSuite) TestApplyLeaves() {
 	s.lmskeeper.AddStudents(s.ctx, &req)
 
 }
-
-// func (s *TestSuite) TestAdminRe() {
-// 	fmt.Println("TestAdminre")
-// 	tests := []struct {
-// 		Name    string
-// 		Address string
-// 	}{
-// 		{"vishal", "123"},
-// 		{"kanna", "456"},
-// 		{"saiteja", "766"},
-// 	}
-// 	for _, test := range tests {
-// 		add := sdk.AccAddress(test.Address)
-// 		req := types.RegisterAdminRequest{
-// 			Name:    test.Name,
-// 			Address: add.String(),
-// 		}
-// 		// s.lmskeeper.AdminRegister(s.ctx, &req)
-// 		check := s.lmskeeper.CheckAdminRegister(s.ctx, req.Address)
-// 		if check == true {
-// 			fmt.Println("Admin Registered")
-// 		} else {
-// 			fmt.Println("Admin didnot Registered")
-// 		}
-// 	}
-// }

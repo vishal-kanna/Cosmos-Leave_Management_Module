@@ -38,7 +38,7 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 	adminpresent := store.Get(types.AdminstoreId(req.Admin))
 	if adminpresent == nil {
 		req.Status = types.LeaveStatus_STATUS_UNDEFINED
-		marshalldata, err := k.cdc.Marshal(req)
+		_, err := k.cdc.Marshal(req)
 		if err != nil {
 			log.Println(err)
 		} else {
@@ -55,13 +55,20 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 		}
 		// store.Set(types.StudentStoreId())
 	} else {
+		//if admin is present then we need to check the student is present in student store or not
+		//if the student is present in store then we need create a new response of accepting the leave
+		//and storing in the allleavestore
 		req.Status = types.LeaveStatus_STATUS_ACCEPTED
+		marshalaccepteddata, err := k.cdc.Marshal(req)
+		if err != nil {
+			log.Println(err)
+		}
 		marshaldata := store.Get(types.LeaveStoreId(req.StudentId))
 		// store.Delete()
 		if marshaldata == nil {
-
+			fmt.Println("student did not request leave")
 		} else {
-
+			store.Set(types.AllLeavesStoreId(req.StudentId), marshalaccepteddata)
 		}
 	}
 	// req.Status = types.LeaveStatus_STATUS_ACCEPTED

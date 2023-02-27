@@ -14,7 +14,7 @@ var (
 	// _ sdk.Msg = &RegisterAdminResponse{}
 	_ sdk.Msg = &AddStudentRequest{}
 	_ sdk.Msg = &ApplyLeaveRequest{}
-
+	_ sdk.Msg = &AcceptLeaveRequest{}
 	// _ legacytx.LegacyMsg = &RegisterAdminRequest{}
 	// _ legacytx.LegacyMsg = &RegisterAdminResponse{}
 	// _ legacytx.LegacyMsg = &AddStudentRequest{}
@@ -81,4 +81,24 @@ func (msg ApplyLeaveRequest) GetSignBytes() []byte {
 func (msg ApplyLeaveRequest) GetSigners() []sdk.AccAddress {
 	fromAddress, _ := sdk.AccAddressFromBech32(msg.Address)
 	return []sdk.AccAddress{fromAddress}
+}
+func NewAcceptLeaveRequest(adminaddress string, studentid string) *AcceptLeaveRequest {
+	return &AcceptLeaveRequest{Admin: adminaddress, StudentId: studentid}
+}
+
+func (msg AcceptLeaveRequest) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&msg))
+}
+func (msg AcceptLeaveRequest) GetSigners() []sdk.AccAddress {
+	fromAddress, _ := sdk.AccAddressFromBech32(msg.Admin)
+	return []sdk.AccAddress{fromAddress}
+}
+func (msg AcceptLeaveRequest) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(msg.Admin); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("Invalid admin Address")
+	}
+	if _, err := sdk.AccAddressFromBech32(msg.StudentId); err != nil {
+		return sdkerrors.ErrInvalidAddress.Wrapf("Invalid student  Address")
+	}
+	return nil
 }

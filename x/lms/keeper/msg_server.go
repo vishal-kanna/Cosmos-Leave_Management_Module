@@ -42,6 +42,6 @@ func (k msgServer) ApplyLeave(goctx context.Context, req *types.ApplyLeaveReques
 }
 func (k msgServer) AcceptLeave(goctx context.Context, req *types.AcceptLeaveRequest) (*types.AcceptLeaveResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
-	k.AcceptLeave(ctx, req)
+	k.AcceptLeaves(ctx, req)
 	return &types.AcceptLeaveResponse{}, nil
 }
