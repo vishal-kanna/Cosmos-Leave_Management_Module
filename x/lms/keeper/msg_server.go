@@ -22,26 +22,63 @@ type msgServer struct {
 
 var _ types.MsgServer = msgServer{}
 
-func (k msgServer) AddStudent(ctx context.Context, req *types.AddStudentRequest) (*types.AddStudentResponse, error) {
+func (k msgServer) AddStudent(goctx context.Context, req *types.AddStudentRequest) (*types.AddStudentResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goctx)
+
+	if req.Admin == "" {
+		return nil, types.ErrAddress
+	}
+	k.AddStudents(ctx, req)
 	return &types.AddStudentResponse{}, nil
 }
 
 func (k msgServer) RegisterAdmin(goctx context.Context, req *types.RegisterAdminRequest) (*types.RegisterAdminResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
 	// err := Keeper.AdminRegister(ctx, &req)
-	k.AdminRegister(ctx, req)
-
+	if req.Address == "" {
+		return nil, types.ErrAddress
+	}
+	if req.Name == "" {
+		return nil, types.ErrNameCantBeEmpty
+	}
+	err := k.AdminRegister(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 	return &types.RegisterAdminResponse{}, nil
 }
 
 func (k msgServer) ApplyLeave(goctx context.Context, req *types.ApplyLeaveRequest) (*types.ApplyLeaveResponse, error) {
 	// k.AcceptLeave(ctx, req)
 	ctx := sdk.UnwrapSDKContext(goctx)
-	k.ApplyLeaves(ctx, req)
-	return &types.ApplyLeaveResponse{}, nil
+	if req.Address == "" {
+		return nil, types.ErrAddress
+	}
+	if req.From == nil {
+		return nil, types.ErrDate
+	}
+	if req.To == nil {
+		return nil, types.ErrDate
+	}
+	if req.Reason == "" {
+		return nil, types.ErrEmptyReason
+	}
+	ans := k.ApplyLeaves(ctx, req)
+	if ans == true {
+		return &types.ApplyLeaveResponse{}, nil
+	}
+	// return nil, false
+	return nil, nil
+
 }
 func (k msgServer) AcceptLeave(goctx context.Context, req *types.AcceptLeaveRequest) (*types.AcceptLeaveResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
+	if req.Admin == "" {
+		return nil, types.ErrAddress
+	}
+	if req.StudentId == "" {
+		return nil, types.ErrStudentDetails
+	}
 	k.AcceptLeaves(ctx, req)
 	return &types.AcceptLeaveResponse{}, nil
 }

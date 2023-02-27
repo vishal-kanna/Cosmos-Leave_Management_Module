@@ -12,4 +12,8 @@ var (
 	ErrStudentNameDoesNotExist = sdkerrors.Register(ModuleName, 5, "Student Name should  not be empty")
 	ErrStudentDetails          = sdkerrors.Register(ModuleName, 6, "Student Details should not be empty")
 	ErrEmptyReason             = sdkerrors.Register(ModuleName, 7, "Reason should not be empty")
+	ErrAddress                 = sdkerrors.Register(ModuleName, 8, "Address can't be empty")
+	ErrNameCantBeEmpty         = sdkerrors.Register(ModuleName, 9, "Name can't be empty")
+	ErrDate                    = sdkerrors.Register(ModuleName, 10, "Date can't be null")
+	// ErrA
 )

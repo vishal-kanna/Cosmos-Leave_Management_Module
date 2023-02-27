@@ -8,10 +8,12 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	// "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
+//NewTxCmd returns a root CLI command handler for all x/lms transaction commands.
 func NewTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
@@ -24,15 +26,15 @@ func NewTxCmd() *cobra.Command {
 	txCmd.AddCommand(
 		NewRegisterAdminCmd(),
 		// NewMultiSendTxCmd(),
-		NewAddStudentRequest(),
-		// NewAddStudentRequest
-		NewApplyLeaveRequest(),
+		NewAddStudentRequestCmd(),
+		NewApplyLeaveRequestCmd(),
+		NewAcceptLeaveRequestCmd(),
 	)
 
 	return txCmd
 }
 
-//NewRegisterAdmin returns CLI command handler for creating a RegisterAdmin method or transaction
+//NewRegisterAdminCmd returns CLI command handler for creating a RegisterAdmin method
 
 func NewRegisterAdminCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -44,18 +46,25 @@ func NewRegisterAdminCmd() *cobra.Command {
 		In order to Register admin first specify the address and next specify name of the admin
 		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 			name := args[0]
 			address := sdk.AccAddress(args[1])
-			types.NewRegisterAdminRequest(address, name)
-			return nil
+			msg := types.NewRegisterAdminRequest(address, name)
+			// return nil
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
-func NewAddStudentRequest() *cobra.Command {
+
+//NewAddStudentRequestCmd returns CLI Command Handler for Adding the student
+func NewAddStudentRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "this is used to by the admin to add the student ",
+		Use:   "",
 		Short: "Admin can add the student ",
 		Long: `Admin need to register first in order to add the student and pass the student details which are need to added,
 		
@@ -69,6 +78,10 @@ func NewAddStudentRequest() *cobra.Command {
 		}
 		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 			adminaddress := args[0]
 			// address := sdk.AccAddress(args[1])
 			// types.NewRegisterAdminRequest(address, name)
@@ -84,21 +97,28 @@ func NewAddStudentRequest() *cobra.Command {
 				}
 				students = append(students, student)
 			}
-			types.NewAddStudentRequest(adminaddress, students)
-			return nil
+			msg := types.NewAddStudentRequest(adminaddress, students)
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+			// return nil
 		},
 	}
 	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
-func NewApplyLeaveRequest() *cobra.Command {
+
+//NewApplyLeaveRequestCmd returns a cobra Command for Handling the Applying leaves
+func NewApplyLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "this cli is used to apply the leave",
+		Use:   "",
 		Short: "Added student can apply the leave",
 		Long: `Student can apply the leave,
 		address | Reason | from | to
 		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 			var format string = "2006-Jan-06"
 			from, _ := time.Parse(format, args[2])
 			to, _ := time.Parse(format, args[3])
@@ -106,24 +126,30 @@ func NewApplyLeaveRequest() *cobra.Command {
 			Reason := args[1]
 			From := &from
 			To := &to
-			types.NewApplyLeaveRequest(Address, Reason, *From, *To)
-			return nil
+			msg := types.NewApplyLeaveRequest(Address, Reason, *From, *To)
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
-func NewAcceptLeaveRequest() *cobra.Command {
+
+//NewAcceptLeaveRequestCmd returns a CLI command that handles the Accepting the leaves
+func NewAcceptLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "This is used to accept the leave",
 		Short: "Accept the leave",
 		Long: `admin accepts the leave req
 		Admin address | Student address		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 			AdminAddress := args[0]
 			StudentAddress := args[1]
-			types.NewAcceptLeaveRequest(AdminAddress, StudentAddress)
-			return nil
+			msg := types.NewAcceptLeaveRequest(AdminAddress, StudentAddress)
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 	flags.AddTxFlagsToCmd(cmd)

@@ -20,13 +20,14 @@ func (k Keeper) AdminRegister(ctx sdk.Context, req *types.RegisterAdminRequest) 
 	store := ctx.KVStore(k.storeKey)
 	bz, err := k.cdc.Marshal(req)
 	if err != nil {
-		fmt.Println("error ")
+		// fmt.Println("error ")
 		return err
-	} else {
-		// fmt.Println("Admin added successfullly")
-		store.Set(types.AdminstoreId(req.Address), bz)
-
 	}
+	// } else {
+	// fmt.Println("Admin added successfullly")
+	store.Set(types.AdminstoreId(req.Address), bz)
+
+	// }
 	return nil
 }
 
@@ -46,7 +47,8 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 			//as well as we need to check whether the student is added by the register admin
 			val := store.Get(types.StudentStoreId(req.StudentId))
 			if val == nil {
-				fmt.Println("store not present in the student store")
+				return types.ErrStudentDidNotLogin
+				// fmt.Println("store not present in the student store")
 			}
 			leaveval := store.Get(types.LeaveStoreId(req.StudentId))
 			if leaveval == nil {
