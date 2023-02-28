@@ -53,6 +53,7 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // GetTxCmd returns the root tx command for the feegrant module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	
 	return cli.NewTxCmd()
 }
 

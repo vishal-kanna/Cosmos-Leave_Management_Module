@@ -15,6 +15,7 @@ import (
 
 //NewTxCmd returns a root CLI command handler for all x/lms transaction commands.
 func NewTxCmd() *cobra.Command {
+	// panic("txn")
 	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Leave Management commands",
@@ -38,7 +39,7 @@ func NewTxCmd() *cobra.Command {
 
 func NewRegisterAdminCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "",
+		Use:   "lms",
 		Short: "Admin can register",
 		Long: `Admin can register using address and name ,
 		
@@ -64,7 +65,7 @@ func NewRegisterAdminCmd() *cobra.Command {
 //NewAddStudentRequestCmd returns CLI Command Handler for Adding the student
 func NewAddStudentRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "",
+		Use:   "lms",
 		Short: "Admin can add the student ",
 		Long: `Admin need to register first in order to add the student and pass the student details which are need to added,
 		
@@ -109,7 +110,7 @@ func NewAddStudentRequestCmd() *cobra.Command {
 //NewApplyLeaveRequestCmd returns a cobra Command for Handling the Applying leaves
 func NewApplyLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "",
+		Use:   "lms",
 		Short: "Added student can apply the leave",
 		Long: `Student can apply the leave,
 		address | Reason | from | to
@@ -137,7 +138,7 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 //NewAcceptLeaveRequestCmd returns a CLI command that handles the Accepting the leaves
 func NewAcceptLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "",
+		Use:   "lms",
 		Short: "Accept the leave",
 		Long: `admin accepts the leave req
 		Admin address | Student address		`,

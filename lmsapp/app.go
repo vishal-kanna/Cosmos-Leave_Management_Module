@@ -1,4 +1,4 @@
-package simapp
+package lmsapp
 
 import (
 	"encoding/json"
@@ -25,6 +25,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/server/api"
 	"github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
+	"github.com/cosmos/cosmos-sdk/simapp"
 
 	// "github.com/cosmos/cosmos-sdk/simapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
@@ -153,7 +154,7 @@ var (
 )
 
 var (
-	_ App                     = (*SimApp)(nil)
+	_ simapp.App              = (*SimApp)(nil)
 	_ servertypes.Application = (*SimApp)(nil)
 )
 
@@ -208,7 +209,7 @@ func init() {
 		panic(err)
 	}
 
-	DefaultNodeHome = filepath.Join(userHomeDir, ".simapp")
+	DefaultNodeHome = filepath.Join(userHomeDir, ".lms")
 }
 
 // NewSimApp returns a reference to an initialized SimApp.
