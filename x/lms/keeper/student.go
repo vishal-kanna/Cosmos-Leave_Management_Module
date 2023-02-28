@@ -66,22 +66,12 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 			log.Println(err)
 		}
 		marshaldata := store.Get(types.LeaveStoreId(req.StudentId))
-		// store.Delete()
 		if marshaldata == nil {
 			fmt.Println("student did not request leave")
 		} else {
 			store.Set(types.AllLeavesStoreId(req.StudentId), marshalaccepteddata)
 		}
 	}
-	// req.Status = types.LeaveStatus_STATUS_ACCEPTED
-	// bz, err := k.cdc.Marshal(req)
-	// if err != nil {
-	// 	return err
-	// } else {
-	// 	store.Set(types.StudentStoreId(req.Admin), bz)
-	// 	fmt.Println("Admin is registered")
-	// }
-	// return nil
 	return nil
 }
 func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool {
@@ -165,10 +155,6 @@ func (k Keeper) CheckAdminRegister(ctx sdk.Context, adminid string) bool {
 	}
 }
 
-// func (k Keeper) CheckStudent(ctx sdk.Context, studentid string) {
-// 	store := ctx.KVStore(k.storeKey)
-// 	val:=
-// }
 func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool {
 	store := ctx.KVStore(k.storeKey)
 	val := store.Get(types.AdminstoreId(req.Admin))
@@ -194,5 +180,23 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 			}
 		}
 		return true
+	}
+}
+func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequest) {
+	store := ctx.KVStore(k.storeKey)
+	var student types.Student
+	itr := store.Iterator(types.StudentKey, nil)
+	for ; itr.Valid(); itr.Next() {
+		k.cdc.Unmarshal(itr.Value(), &student)
+		fmt.Println("the students details are ", student)
+	}
+}
+func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) {
+	store := ctx.KVStore(k.storeKey)
+	var leaves types.AcceptLeaveRequest
+	itr := store.Iterator(types.AllLeavesKey, nil)
+	for ; itr.Valid(); itr.Next() {
+		k.cdc.Unmarshal(itr.Value(), &leaves)
+		fmt.Println("the leaves are ", leaves)
 	}
 }

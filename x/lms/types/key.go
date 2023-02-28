@@ -1,10 +1,10 @@
 package types
 
 const (
-	ModuleName = "leavemanagementsystem"
-	StoreKey   = ModuleName
-	// RouterKey    = ModuleName
-	// QuerierRoute = ModuleName
+	ModuleName   = "leavemanagementsystem"
+	StoreKey     = ModuleName
+	RouterKey    = ModuleName
+	QuerierRoute = ModuleName
 )
 
 var (
@@ -14,6 +14,8 @@ var (
 	LeaveId      = []byte{0x04}
 	AllLeavesKey = []byte{0x05}
 )
+
+// const StoreKey = ModuleName
 
 func StudentStoreId(studentid string) []byte {
 	key := make([]byte, len(StudentKey)+len(studentid))

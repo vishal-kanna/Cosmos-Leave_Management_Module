@@ -38,7 +38,7 @@ func NewTxCmd() *cobra.Command {
 
 func NewRegisterAdminCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "this is used to register the admin ",
+		Use:   "",
 		Short: "Admin can register",
 		Long: `Admin can register using address and name ,
 		
@@ -137,7 +137,7 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 //NewAcceptLeaveRequestCmd returns a CLI command that handles the Accepting the leaves
 func NewAcceptLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "This is used to accept the leave",
+		Use:   "",
 		Short: "Accept the leave",
 		Long: `admin accepts the leave req
 		Admin address | Student address		`,
