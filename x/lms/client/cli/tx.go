@@ -39,7 +39,8 @@ func NewTxCmd() *cobra.Command {
 
 func NewRegisterAdminCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "lms",
+		Use:   "registeradmin",
+		Args:  cobra.ExactArgs(3),
 		Short: "Admin can register",
 		Long: `Admin can register using address and name ,
 		
@@ -51,9 +52,10 @@ func NewRegisterAdminCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			name := args[0]
-			address := sdk.AccAddress(args[1])
-			msg := types.NewRegisterAdminRequest(address, name)
+			signer := args[0]
+			name := args[1]
+			address := args[2]
+			msg := types.NewRegisterAdminRequest(signer, address, name)
 			// return nil
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -65,7 +67,7 @@ func NewRegisterAdminCmd() *cobra.Command {
 //NewAddStudentRequestCmd returns CLI Command Handler for Adding the student
 func NewAddStudentRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "lms",
+		Use:   "addstudent",
 		Short: "Admin can add the student ",
 		Long: `Admin need to register first in order to add the student and pass the student details which are need to added,
 		
@@ -83,24 +85,24 @@ func NewAddStudentRequestCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			adminaddress := args[0]
-			// address := sdk.AccAddress(args[1])
-			// types.NewRegisterAdminRequest(address, name)
+			signer := args[0]
+			adminaddress := args[1]
 
 			//create an array of students to store the students details
 			// arrayOfStudents := *[]types.Student{}
 			students := []*types.Student{}
 			for i := 0; i < (len(args)-1)/3; i++ {
+
 				student := &types.Student{
-					Name:    args[3*i+1],
-					Id:      args[3*i+2],
-					Address: args[3*i+3],
+					Name:    args[3*i+2],
+					Id:      args[3*i+3],
+					Address: args[3*i+4],
 				}
 				students = append(students, student)
 			}
-			msg := types.NewAddStudentRequest(adminaddress, students)
+
+			msg := types.NewAddStudentRequest(signer, adminaddress, students)
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-			// return nil
 		},
 	}
 	flags.AddTxFlagsToCmd(cmd)
@@ -110,7 +112,7 @@ func NewAddStudentRequestCmd() *cobra.Command {
 //NewApplyLeaveRequestCmd returns a cobra Command for Handling the Applying leaves
 func NewApplyLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "lms",
+		Use:   "applyleave",
 		Short: "Added student can apply the leave",
 		Long: `Student can apply the leave,
 		address | Reason | from | to
@@ -121,13 +123,15 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 				return err
 			}
 			var format string = "2006-Jan-06"
-			from, _ := time.Parse(format, args[2])
-			to, _ := time.Parse(format, args[3])
-			Address := args[0]
-			Reason := args[1]
+			from, _ := time.Parse(format, args[3])
+			to, _ := time.Parse(format, args[4])
+			Address, _ := sdk.AccAddressFromBech32(args[1])
+			Reason := args[2]
 			From := &from
 			To := &to
-			msg := types.NewApplyLeaveRequest(Address, Reason, *From, *To)
+			Signer := args[0]
+
+			msg := types.NewApplyLeaveRequest(Signer, Address.String(), Reason, *From, *To)
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
@@ -138,7 +142,7 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 //NewAcceptLeaveRequestCmd returns a CLI command that handles the Accepting the leaves
 func NewAcceptLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "lms",
+		Use:   "acceptleave",
 		Short: "Accept the leave",
 		Long: `admin accepts the leave req
 		Admin address | Student address		`,
@@ -147,9 +151,10 @@ func NewAcceptLeaveRequestCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			AdminAddress := args[0]
-			StudentAddress := args[1]
-			msg := types.NewAcceptLeaveRequest(AdminAddress, StudentAddress)
+			Signer := args[0]
+			AdminAddress := args[1]
+			StudentAddress := args[2]
+			msg := types.NewAcceptLeaveRequest(Signer, AdminAddress, StudentAddress)
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}

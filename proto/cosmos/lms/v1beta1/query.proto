@@ -1,7 +1,9 @@
 syntax="proto3";
 package cosmos.lms.v1beta1;
 option go_package="x/lms/types";    
-import "google/api/annotations.proto" ;                                                                                                                                                                                                                                                                                                                                                                       
+import "google/api/annotations.proto" ;     
+import "cosmos/lms/v1beta1/tx.proto";
+
 // import "cosmos/query/v1/query.proto";
 service query{
     rpc ListAllTheLeaves(ListAllTheLeavesRequest)returns(ListAllTheLeavesResponse){
@@ -13,6 +15,10 @@ service query{
     }
 }
 message ListAllTheLeavesRequest{}
-message ListAllTheLeavesResponse{}
-message ListAllTheStudentResponse{}
+message ListAllTheLeavesResponse{
+    repeated AcceptLeaveRequest leaves=1;
+}
+message ListAllTheStudentResponse{
+    repeated Student students=1;
+}
 message ListAllTheStudentRequest{}

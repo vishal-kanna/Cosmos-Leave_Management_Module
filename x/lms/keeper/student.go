@@ -32,7 +32,7 @@ func (k Keeper) AdminRegister(ctx sdk.Context, req *types.RegisterAdminRequest) 
 }
 
 func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) error {
-	if _, err := sdk.AccAddressFromBech32(req.Admin); err != nil {
+	if _, err := sdk.AccAddressFromBech32(req.Signer); err != nil {
 		panic(fmt.Errorf("invalid bank authority address: %w", err))
 	}
 	store := ctx.KVStore(k.storeKey)
@@ -57,6 +57,7 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 		}
 		// store.Set(types.StudentStoreId())
 	} else {
+		// panic("called")
 		//if admin is present then we need to check the student is present in student store or not
 		//if the student is present in store then we need create a new response of accepting the leave
 		//and storing in the allleavestore
@@ -182,21 +183,29 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 		return true
 	}
 }
-func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequest) {
+func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequest) []*types.Student {
+	// fmt.Println("1")
 	store := ctx.KVStore(k.storeKey)
-	var student types.Student
+
+	// fmt.Println("2")
+	var students []*types.Student
 	itr := store.Iterator(types.StudentKey, nil)
 	for ; itr.Valid(); itr.Next() {
+		var student types.Student
 		k.cdc.Unmarshal(itr.Value(), &student)
+		students = append(students, &student)
 		fmt.Println("the students details are ", student)
 	}
+	return students
 }
-func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) {
+func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) []*types.AcceptLeaveRequest {
 	store := ctx.KVStore(k.storeKey)
-	var leaves types.AcceptLeaveRequest
+	var leaves []*types.AcceptLeaveRequest
 	itr := store.Iterator(types.AllLeavesKey, nil)
 	for ; itr.Valid(); itr.Next() {
-		k.cdc.Unmarshal(itr.Value(), &leaves)
-		fmt.Println("the leaves are ", leaves)
+		var leave types.AcceptLeaveRequest
+		k.cdc.Unmarshal(itr.Value(), &leave)
+		leaves = append(leaves, &leave)
 	}
+	return leaves
 }

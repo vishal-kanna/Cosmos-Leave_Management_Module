@@ -19,33 +19,37 @@ service Msg {
 
 message RegisterAdminRequest {
     // address is the account address of the admin.
-    string address = 1;
+    string signer=1;
+
+    string address = 2;
     
     // name is the admin name
-    string name = 2;
+    string name = 3;
 }
 
 message RegisterAdminResponse{}
 
 message AddStudentRequest {
     // admin is the account address of the admin
-    string admin = 1;
+    string signer=1;
+    string admin = 2;
     
     // students is the list of Student.
-    repeated Student students = 2;
+    repeated Student students = 3;
 }
 
 message AddStudentResponse{}
 
 message ApplyLeaveRequest {
+    string signer=1;
+
+    string address = 2;
     
-    string address = 1;
+    string reason = 3;
     
-    string reason = 2;
+    google.protobuf.Timestamp from = 4  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
     
-    google.protobuf.Timestamp from = 3  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
-    
-    google.protobuf.Timestamp to = 4  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+    google.protobuf.Timestamp to = 5  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
 }
 
 message ApplyLeaveResponse {
@@ -62,11 +66,13 @@ enum LeaveStatus {
 
 message AcceptLeaveRequest {
 
-    string admin = 1;
+    string signer=1;
+
+    string admin = 2;
     
-    string student_id = 2;
+    string student_id = 3;
     
-    LeaveStatus status = 3;
+    LeaveStatus status = 4;
 }
 
 message AcceptLeaveResponse {

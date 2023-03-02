@@ -40,7 +40,10 @@ func (AppModuleBasic) Name() string {
 // RegisterLegacyAminoCodec registers the mint module's types on the given LegacyAmino codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
 
-func (b AppModuleBasic) RegisterInterfaces(_ cdctypes.InterfaceRegistry) {}
+func (b AppModuleBasic) RegisterInterfaces(cdc cdctypes.InterfaceRegistry) {
+	// panic("callled")
+	types.RegisterInterfaces(cdc)
+}
 
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
 	return nil
@@ -53,7 +56,7 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // GetTxCmd returns the root tx command for the feegrant module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	
+
 	return cli.NewTxCmd()
 }
 
@@ -74,6 +77,7 @@ type AppModule struct {
 }
 
 func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
+	// panic("called")
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         keeper,
@@ -103,9 +107,6 @@ func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sd
 
 // RegisterServices registers a gRPC query service to respond to the
 // module-specific gRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
-}
 
 // InitGenesis performs genesis initialization for the mint module. It returns
 // no validator updates.
@@ -128,4 +129,8 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	simulation.RandomizedGenState(simState)
+}
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), am.keeper)
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }

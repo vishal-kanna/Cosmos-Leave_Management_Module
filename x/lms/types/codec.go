@@ -8,18 +8,21 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
 )
 
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &RegisterAdminRequest{}, "clms/RegisterAdminRequest")
-	legacy.RegisterAminoMsg(cdc, &AddStudentRequest{}, "clms/AddStudentRequest")
-	legacy.RegisterAminoMsg(cdc, &ApplyLeaveRequest{}, "clms/ApplyLeaveRequest")
-}
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&RegisterAdminRequest{},
 		&AddStudentRequest{},
 		&ApplyLeaveRequest{},
+		&AcceptLeaveRequest{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
+}
+
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	legacy.RegisterAminoMsg(cdc, &RegisterAdminRequest{}, "clms/RegisterAdminRequest")
+	legacy.RegisterAminoMsg(cdc, &AddStudentRequest{}, "clms/AddStudentRequest")
+	legacy.RegisterAminoMsg(cdc, &ApplyLeaveRequest{}, "clms/ApplyLeaveRequest")
+	legacy.RegisterAminoMsg(cdc, &AcceptLeaveRequest{}, "clms/AcceptLeaveRequest")
 }
 
 var (
