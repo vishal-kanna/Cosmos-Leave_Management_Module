@@ -20,6 +20,7 @@ func GetQueryCmd() *cobra.Command {
 	cmd.AddCommand(
 		ListAllTheLeavesCmd(),
 		ListAllTheStudentCmd(),
+		ListStudentLeaveStatus(),
 	)
 
 	return cmd
@@ -60,6 +61,29 @@ func ListAllTheStudentCmd() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 			params := &types.ListAllTheStudentRequest{}
 			res, err := queryClient.ListAllTheStudent(cmd.Context(), params)
+			return clientCtx.PrintProto(res)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+func ListStudentLeaveStatus() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "studentleavestatus",
+		Short: "List all the students",
+		Long: `List all the students which are added by admin,
+		`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+			studentaddress := args[0]
+			params := &types.GetLeaveStatusRequest{
+				Studentaddress: studentaddress,
+			}
+			res, err := queryClient.GetLeaveStatus(cmd.Context(), params)
 			return clientCtx.PrintProto(res)
 		},
 	}

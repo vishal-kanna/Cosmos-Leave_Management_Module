@@ -29,3 +29,11 @@ func (k Keeper) ListAllTheStudent(goCtx context.Context, req *types.ListAllTheSt
 	}
 	return &res1, nil
 }
+func (k Keeper) GetLeaveStatus(goctx context.Context, req *types.GetLeaveStatusRequest) (*types.GetLeaveStatusResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goctx)
+	res := k.GetleaveStatus(ctx, req.Studentaddress)
+	res1 := types.GetLeaveStatusResponse{
+		Status: &res,
+	}
+	return &res1, nil
+}

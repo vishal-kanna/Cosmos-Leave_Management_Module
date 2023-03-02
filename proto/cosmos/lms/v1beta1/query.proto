@@ -11,8 +11,17 @@ service query{
         option (google.api.http).get   = "/cosmos/lms/v1beta1/leaveid";
     }
     rpc ListAllTheStudent(ListAllTheStudentRequest)returns(ListAllTheStudentResponse){
+        option (google.api.http).get   = "/cosmos/lms/v1beta1/studentsid";
+    }
+    rpc GetLeaveStatus(GetLeaveStatusRequest)returns(GetLeaveStatusResponse){
         option (google.api.http).get   = "/cosmos/lms/v1beta1/studentid";
     }
+}
+message GetLeaveStatusRequest{
+    string studentaddress=1;
+}
+message GetLeaveStatusResponse{
+    AcceptLeaveRequest status=1;
 }
 message ListAllTheLeavesRequest{}
 message ListAllTheLeavesResponse{

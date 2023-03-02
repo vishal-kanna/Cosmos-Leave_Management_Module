@@ -209,3 +209,16 @@ func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest
 	}
 	return leaves
 }
+
+func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string) types.AcceptLeaveRequest {
+	store := ctx.KVStore(k.storeKey)
+	var leave types.AcceptLeaveRequest
+	res := store.Get(types.AllLeavesStoreId(studentaddress))
+	if res == nil {
+		fmt.Println("no results")
+	} else {
+
+		k.cdc.Unmarshal(res, &leave)
+	}
+	return leave
+}
