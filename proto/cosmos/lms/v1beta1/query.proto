@@ -16,6 +16,15 @@ service query{
     rpc GetLeaveStatus(GetLeaveStatusRequest)returns(GetLeaveStatusResponse){
         option (google.api.http).get   = "/cosmos/lms/v1beta1/studentid";
     }
+    rpc GetAdmin(GetadminRequest)returns (GetadminResponse){
+        option (google.api.http).get   = "/cosmos/lms/v1beta1/admin";   
+    }
+}
+message GetadminRequest{
+    string address=1;
+}
+message GetadminResponse{
+    RegisterAdminRequest admins=1;
 }
 message GetLeaveStatusRequest{
     string studentaddress=1;

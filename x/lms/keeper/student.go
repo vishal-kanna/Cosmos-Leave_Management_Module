@@ -165,7 +165,7 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 	} else {
 		// store.Set(types.StudentStoreId(req.Studen))
 		for _, val := range req.Students {
-			student := store.Get(types.StudentStoreId(val.Address))
+			student := store.Get(types.StudentStoreId(val.Id))
 			if student == nil {
 				// fmt.Println("studn")
 				studentmarshall, err := k.cdc.Marshal(val)
@@ -173,7 +173,8 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 					log.Println(err)
 					return false
 				}
-				store.Set(types.StudentStoreId(val.Address), studentmarshall)
+				store.Set(types.StudentStoreId(val.Id), studentmarshall)
+				// panic("called2")
 				fmt.Println("Student added successfully")
 				return true
 			} else {
@@ -184,12 +185,10 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 	}
 }
 func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequest) []*types.Student {
-	// fmt.Println("1")
 	store := ctx.KVStore(k.storeKey)
-
-	// fmt.Println("2")
 	var students []*types.Student
-	itr := store.Iterator(types.StudentKey, nil)
+	// itr := store.Iterator(types.StudentKey, nil)
+	itr := sdk.KVStorePrefixIterator(store, types.StudentKey)
 	for ; itr.Valid(); itr.Next() {
 		var student types.Student
 		k.cdc.Unmarshal(itr.Value(), &student)
@@ -201,7 +200,7 @@ func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequ
 func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) []*types.AcceptLeaveRequest {
 	store := ctx.KVStore(k.storeKey)
 	var leaves []*types.AcceptLeaveRequest
-	itr := store.Iterator(types.AllLeavesKey, nil)
+	itr := sdk.KVStorePrefixIterator(store, types.AllLeavesKey)
 	for ; itr.Valid(); itr.Next() {
 		var leave types.AcceptLeaveRequest
 		k.cdc.Unmarshal(itr.Value(), &leave)
@@ -214,6 +213,7 @@ func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string) types.Acc
 	store := ctx.KVStore(k.storeKey)
 	var leave types.AcceptLeaveRequest
 	res := store.Get(types.AllLeavesStoreId(studentaddress))
+	// itr := sdk.KVStorePrefixIterator(store, types.StudentKey)
 	if res == nil {
 		fmt.Println("no results")
 	} else {
@@ -221,4 +221,15 @@ func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string) types.Acc
 		k.cdc.Unmarshal(res, &leave)
 	}
 	return leave
+}
+func (k Keeper) Getadmin(ctx sdk.Context, adminid string) types.RegisterAdminRequest {
+	store := ctx.KVStore(k.storeKey)
+	val := store.Get(types.AdminstoreId(adminid))
+	if val == nil {
+		return types.RegisterAdminRequest{}
+	} else {
+		res := types.RegisterAdminRequest{}
+		k.cdc.Unmarshal(val, &res)
+		return res
+	}
 }

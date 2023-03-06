@@ -28,8 +28,13 @@ func (k Keeper) AddStudent(goctx context.Context, req *types.AddStudentRequest) 
 	if req.Admin == "" {
 		return nil, types.ErrAddress
 	}
-	k.AddStudents(ctx, req)
-	return &types.AddStudentResponse{}, nil
+	res := k.AddStudents(ctx, req)
+	if res == true {
+
+		return &types.AddStudentResponse{}, nil
+	} else {
+		return nil, types.ErrAdminDidNotLogin
+	}
 }
 
 func (k Keeper) RegisterAdmin(goctx context.Context, req *types.RegisterAdminRequest) (*types.RegisterAdminResponse, error) {

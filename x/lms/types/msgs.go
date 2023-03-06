@@ -15,9 +15,6 @@ var (
 	_ sdk.Msg = &AddStudentRequest{}
 	_ sdk.Msg = &ApplyLeaveRequest{}
 	_ sdk.Msg = &AcceptLeaveRequest{}
-	// _ legacytx.LegacyMsg = &RegisterAdminRequest{}
-	// _ legacytx.LegacyMsg = &RegisterAdminResponse{}
-	// _ legacytx.LegacyMsg = &AddStudentRequest{}
 )
 
 func NewRegisterAdminRequest(signer string, adminadd string, name string) *RegisterAdminRequest {
@@ -25,7 +22,7 @@ func NewRegisterAdminRequest(signer string, adminadd string, name string) *Regis
 }
 
 func (msg RegisterAdminRequest) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(msg.Signer); err != nil {
+	if _, err := sdk.AccAddressFromBech32(msg.Address); err != nil {
 		return sdkerrors.ErrInvalidAddress.Wrapf("invalid from address: %s", err)
 	}
 	if msg.Name == "" {
@@ -97,8 +94,10 @@ func (msg AcceptLeaveRequest) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Signer); err != nil {
 		return sdkerrors.ErrInvalidAddress.Wrapf("Invalid admin Address")
 	}
-	if _, err := sdk.AccAddressFromBech32(msg.StudentId); err != nil {
+	if _, err := sdk.AccAddressFromBech32(msg.Signer); err != nil {
 		return sdkerrors.ErrInvalidAddress.Wrapf("Invalid student  Address")
 	}
 	return nil
 }
+
+// func (msg )
