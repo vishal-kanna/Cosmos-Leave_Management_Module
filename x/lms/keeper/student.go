@@ -176,6 +176,11 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 				store.Set(types.StudentStoreId(val.Id), studentmarshall)
 				// panic("called2")
 				fmt.Println("Student added successfully")
+				fmt.Println("Student added successfully")
+
+				fmt.Println("Student added successfully")
+				fmt.Println("Student added successfully")
+
 				return true
 			} else {
 				return false

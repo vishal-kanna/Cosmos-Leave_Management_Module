@@ -40,7 +40,7 @@ func NewTxCmd() *cobra.Command {
 func NewRegisterAdminCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "registeradmin",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		Short: "Admin can register",
 		Long: `Admin can register using address and name ,
 		[adminname]|[address]
@@ -55,9 +55,9 @@ func NewRegisterAdminCmd() *cobra.Command {
 			signer := clientCtx.GetFromAddress()
 			fmt.Println("the signer address", signer)
 			name := args[0]
-			address := args[1]
+			address := clientCtx.GetFromAddress()
 
-			msg := types.NewRegisterAdminRequest(signer.String(), address, name)
+			msg := types.NewRegisterAdminRequest(signer.String(), address.String(), name)
 			// return nil
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -73,14 +73,8 @@ func NewAddStudentRequestCmd() *cobra.Command {
 		Short: "Admin can add the student ",
 		Long: `Admin need to register first in order to add the student and pass the student details which are need to added,
 		
-		[adminaddress]|[studentname] |[id]|[address]
-		the format that need to be given in command line is 
-		first specify the admin address and 
-		then pass the list of students{
-			Name==args[1]
-			Id=args[2]
-			Address=args[3]
-		}
+		[studentname] |[id]|[address]
+		
 		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -88,22 +82,22 @@ func NewAddStudentRequestCmd() *cobra.Command {
 				return err
 			}
 			signer := clientCtx.GetFromAddress()
-			adminaddress := args[0]
+			adminaddress := clientCtx.GetFromAddress()
 
 			//create an array of students to store the students details
 			// arrayOfStudents := *[]types.Student{}
 			students := []*types.Student{}
-			for i := 0; i < (len(args)-1)/3; i++ {
+			for i := 0; i < (len(args))/3; i++ {
 
 				student := &types.Student{
-					Name:    args[3*i+1],
-					Id:      args[3*i+2],
-					Address: args[3*i+3],
+					Name:    args[3*i+0],
+					Id:      args[3*i+1],
+					Address: args[3*i+2],
 				}
 				students = append(students, student)
 			}
 
-			msg := types.NewAddStudentRequest(signer.String(), adminaddress, students)
+			msg := types.NewAddStudentRequest(signer.String(), adminaddress.String(), students)
 			// panic("called")
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
@@ -117,9 +111,10 @@ func NewAddStudentRequestCmd() *cobra.Command {
 func NewApplyLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "applyleave",
+		Args:  cobra.ExactArgs(4),
 		Short: "Added student can apply the leave",
 		Long: `Student can apply the leave,
-			address | Reason | from | to
+			[studentid] | [Reason] | [from] | [to]
 		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -147,19 +142,20 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 func NewAcceptLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "acceptleave",
+		Args:  cobra.ExactArgs(1),
 		Short: "Accept the leave",
 		Long: `admin accepts the leave req
-		[signer] | [adminaddress] | [studentid]
-		Admin address | Student address		`,
+			[Student address]		
+		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 			Signer := clientCtx.GetFromAddress()
-			AdminAddress := args[0]
-			Studentid := args[1]
-			msg := types.NewAcceptLeaveRequest(Signer.String(), AdminAddress, Studentid)
+			AdminAddress := clientCtx.GetFromAddress()
+			Studentid := args[0]
+			msg := types.NewAcceptLeaveRequest(Signer.String(), AdminAddress.String(), Studentid)
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
