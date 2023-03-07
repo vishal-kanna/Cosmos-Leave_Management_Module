@@ -4,6 +4,7 @@ import (
 	"clms/x/lms/types"
 	"context"
 	"fmt"
+	"log"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -23,7 +24,9 @@ func (k Keeper) ListAllTheLeaves(goCtx context.Context, req *types.ListAllTheLea
 }
 func (k Keeper) ListAllTheStudent(goCtx context.Context, req *types.ListAllTheStudentRequest) (*types.ListAllTheStudentResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+	log.Println("======================")
 	res := k.GetAllStudents(ctx, req)
+	fmt.Println("the res is++++++++++++++++++++++++", res)
 	res1 := types.ListAllTheStudentResponse{
 		Students: res,
 	}

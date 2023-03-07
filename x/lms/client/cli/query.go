@@ -2,6 +2,7 @@ package cli
 
 import (
 	"clms/x/lms/types"
+	"log"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -54,6 +55,7 @@ func ListAllTheStudentCmd() *cobra.Command {
 		Long: `List all the students which are added by admin,
 		`,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// panic("called0")
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
@@ -61,6 +63,9 @@ func ListAllTheStudentCmd() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 			params := &types.ListAllTheStudentRequest{}
 			res, err := queryClient.ListAllTheStudent(cmd.Context(), params)
+			if err != nil {
+				log.Println("the error is", err)
+			}
 			return clientCtx.PrintProto(res)
 		},
 	}

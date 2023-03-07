@@ -27,7 +27,6 @@ func (k Keeper) AdminRegister(ctx sdk.Context, req *types.RegisterAdminRequest) 
 	// fmt.Println("Admin added successfullly")
 	store.Set(types.AdminstoreId(req.Address), bz)
 
-	// }
 	return nil
 }
 
@@ -163,17 +162,15 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 		fmt.Println("Admin did not register ")
 		return false
 	} else {
-		// store.Set(types.StudentStoreId(req.Studen))
-		for _, val := range req.Students {
-			student := store.Get(types.StudentStoreId(val.Id))
+		for _, val1 := range req.Students {
+			student := store.Get(types.StudentStoreId(val1.Id))
 			if student == nil {
-				// fmt.Println("studn")
-				studentmarshall, err := k.cdc.Marshal(val)
+				studentmarshall, err := k.cdc.Marshal(val1)
 				if err != nil {
 					log.Println(err)
 					return false
 				}
-				store.Set(types.StudentStoreId(val.Id), studentmarshall)
+				store.Set(types.StudentStoreId(val1.Id), studentmarshall)
 				// panic("called2")
 				fmt.Println("Student added successfully")
 				fmt.Println("Student added successfully")
@@ -190,16 +187,26 @@ func (k Keeper) AddStudents(ctx sdk.Context, req *types.AddStudentRequest) bool 
 	}
 }
 func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequest) []*types.Student {
+	// panic("called1")
+	// fmt.Println("hey im in getallstudents keeper methods ")
 	store := ctx.KVStore(k.storeKey)
+	// fmt.Println("hey im in getallstudents keeper methods 5")
+
 	var students []*types.Student
-	// itr := store.Iterator(types.StudentKey, nil)
+	fmt.Println("hey im in getallstudents keeper methods 6")
 	itr := sdk.KVStorePrefixIterator(store, types.StudentKey)
+	defer itr.Close()
+	fmt.Println("iterator function ", itr)
+	fmt.Println("hey im in getallstudents keeper methods 1")
+
 	for ; itr.Valid(); itr.Next() {
 		var student types.Student
+		fmt.Println("hey im in getallstudents keeper methods 2")
 		k.cdc.Unmarshal(itr.Value(), &student)
 		students = append(students, &student)
-		fmt.Println("the students details are ", student)
 	}
+	fmt.Println("the students details are ==========================================", students)
+
 	return students
 }
 func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) []*types.AcceptLeaveRequest {
@@ -222,7 +229,6 @@ func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string) types.Acc
 	if res == nil {
 		fmt.Println("no results")
 	} else {
-
 		k.cdc.Unmarshal(res, &leave)
 	}
 	return leave

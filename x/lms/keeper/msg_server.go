@@ -33,7 +33,7 @@ func (k Keeper) AddStudent(goctx context.Context, req *types.AddStudentRequest) 
 
 		return &types.AddStudentResponse{}, nil
 	} else {
-		return nil, types.ErrAdminDidNotLogin
+		return nil, types.ErrStudentAlreadyExist
 	}
 }
 

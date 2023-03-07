@@ -15,5 +15,5 @@ var (
 	ErrAddress                 = sdkerrors.Register(ModuleName, 8, "Address can't be empty")
 	ErrNameCantBeEmpty         = sdkerrors.Register(ModuleName, 9, "Name can't be empty")
 	ErrDate                    = sdkerrors.Register(ModuleName, 10, "Date can't be null")
-	// ErrA
+	ErrStudentAlreadyExist     = sdkerrors.Register(ModuleName, 11, "Student already exist")
 )
