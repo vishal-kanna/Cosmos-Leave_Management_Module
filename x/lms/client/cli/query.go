@@ -22,6 +22,7 @@ func GetQueryCmd() *cobra.Command {
 		ListAllTheLeavesCmd(),
 		ListAllTheStudentCmd(),
 		ListStudentLeaveStatus(),
+		Admin(),
 	)
 
 	return cmd
@@ -32,6 +33,8 @@ func ListAllTheLeavesCmd() *cobra.Command {
 		Short: "List all the leaves",
 		Long: `List all the leaves which are accepted or rejected by the admin,
 		`,
+		Example: "./simd query lms listallleaves",
+
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -54,6 +57,7 @@ func ListAllTheStudentCmd() *cobra.Command {
 		Short: "List all the students",
 		Long: `List all the students which are added by admin,
 		`,
+		Example: "./simd query lms listallstudents",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// panic("called0")
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -78,6 +82,8 @@ func ListStudentLeaveStatus() *cobra.Command {
 		Short: "List all the students",
 		Long: `List all the students which are added by admin,
 		`,
+		Example: "./simd query lms studentleavestatus [studentid]",
+
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -102,15 +108,15 @@ func Admin() *cobra.Command {
 		Long: `Lists the admin details,
 		[adminaddress]
 		`,
+		Example: "./simd query lms admin",
+
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 			queryClient := types.NewQueryClient(clientCtx)
-			req := types.GetadminRequest{
-				Address: args[0],
-			}
+			req := types.GetadminRequest{}
 			res, err := queryClient.GetAdmin(cmd.Context(), &req)
 			return clientCtx.PrintProto(res)
 		},

@@ -21,10 +21,10 @@ service query{
     }
 }
 message GetadminRequest{
-    string address=1;
+
 }
 message GetadminResponse{
-    RegisterAdminRequest admins=1;
+    repeated RegisterAdminRequest admins=1;
 }
 message GetLeaveStatusRequest{
     string studentaddress=1;

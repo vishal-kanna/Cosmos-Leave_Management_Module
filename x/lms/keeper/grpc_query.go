@@ -42,9 +42,9 @@ func (k Keeper) GetLeaveStatus(goctx context.Context, req *types.GetLeaveStatusR
 }
 func (k Keeper) GetAdmin(goctx context.Context, req *types.GetadminRequest) (*types.GetadminResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
-	res := k.Getadmin(ctx, req.Address)
+	res := k.Getadmin(ctx, req)
 	res1 := types.GetadminResponse{
-		Admins: &res,
+		Admins: res,
 	}
 	return &res1, nil
 }

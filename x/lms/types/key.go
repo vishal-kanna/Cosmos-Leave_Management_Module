@@ -13,6 +13,7 @@ var (
 	LeaveKey     = []byte{0x03}
 	LeaveId      = []byte{0x04}
 	AllLeavesKey = []byte{0x05}
+	// AllStudentLeavesKey = []byte{0x06}
 )
 
 // const StoreKey = ModuleName
@@ -52,3 +53,5 @@ func AllLeavesStoreId(sid string) []byte {
 	copy(key[len(AllLeavesKey):], []byte(sid))
 	return key
 }
+
+// func

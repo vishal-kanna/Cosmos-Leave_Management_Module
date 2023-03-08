@@ -101,7 +101,16 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 				store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
 				//Need to change this because here Im manually converting the string into the
 				//to better understand LeaveKeyStoreId store the respective studnet counter
-
+				leaveapply := &types.AcceptLeaveRequest{
+					Admin:     req.Signer,
+					StudentId: req.Address,
+					Status:    types.LeaveStatus_STATUS_UNDEFINED,
+				}
+				leavemarshall, err := k.cdc.Marshal(leaveapply)
+				if err != nil {
+					panic(err)
+				}
+				store.Set(types.AllLeavesStoreId(req.Address), leavemarshall)
 				store.Set(types.LeaveKeyStoreId(req.Address), []byte(InttoString))
 			} else {
 				//if we do not get the nil means the student address already present in the array
@@ -117,8 +126,21 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 					s := strconv.Itoa(a)
 					store.Set(types.LeaveKeyStoreId(req.Address), []byte(s))
 					store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
+					leaveapply := &types.AcceptLeaveRequest{
+						Admin:     req.Signer,
+						StudentId: req.Address,
+						Status:    types.LeaveStatus_STATUS_UNDEFINED,
+					}
+					leavemarshall, err := k.cdc.Marshal(leaveapply)
+					if err != nil {
+						panic(err)
+					}
+					// fmt.Println("its storing the data")
+					store.Set(types.AllLeavesStoreId(req.Address), leavemarshall)
+					// fmt.Println("its storing the data")
+					// fmt.Println("its storing the data")
+
 				}
-				// k.cdc.Unmarshal(val, &res)
 			}
 			store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
 		}
@@ -233,14 +255,16 @@ func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string) types.Acc
 	}
 	return leave
 }
-func (k Keeper) Getadmin(ctx sdk.Context, adminid string) types.RegisterAdminRequest {
+func (k Keeper) Getadmin(ctx sdk.Context, req *types.GetadminRequest) []*types.RegisterAdminRequest {
 	store := ctx.KVStore(k.storeKey)
-	val := store.Get(types.AdminstoreId(adminid))
-	if val == nil {
-		return types.RegisterAdminRequest{}
-	} else {
-		res := types.RegisterAdminRequest{}
-		k.cdc.Unmarshal(val, &res)
-		return res
+	// val := store.Get(types.AdminstoreId(adminid))
+	var admin []*types.RegisterAdminRequest
+	itr := sdk.KVStorePrefixIterator(store, types.AdminKey)
+	for ; itr.Valid(); itr.Next() {
+		var adminn types.RegisterAdminRequest
+		k.cdc.Unmarshal(itr.Value(), &adminn)
+		admin = append(admin, &adminn)
+		// leaves = append(leaves, &leave)
 	}
+	return admin
 }
