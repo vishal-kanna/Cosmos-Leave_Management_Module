@@ -8,15 +8,14 @@ const (
 )
 
 var (
-	AdminKey     = []byte{0x01}
-	StudentKey   = []byte{0x02}
-	LeaveKey     = []byte{0x03}
-	LeaveId      = []byte{0x04}
-	AllLeavesKey = []byte{0x05}
-	// AllStudentLeavesKey = []byte{0x06}
+	AdminKey         = []byte{0x01}
+	StudentKey       = []byte{0x02}
+	LeaveKey         = []byte{0x03}
+	LeaveId          = []byte{0x04}
+	AllLeavesKey     = []byte{0x05}
+	LeavesKey        = []byte{0x06}
+	LeavesStoringKey = []byte{0x07}
 )
-
-// const StoreKey = ModuleName
 
 func StudentStoreId(studentid string) []byte {
 	key := make([]byte, len(StudentKey)+len(studentid))
@@ -53,5 +52,16 @@ func AllLeavesStoreId(sid string) []byte {
 	copy(key[len(AllLeavesKey):], []byte(sid))
 	return key
 }
-
-// func
+func LeaveCounterStoreId(adminaddress string, counter string) []byte {
+	key := make([]byte, len(LeavesKey)+len(adminaddress)+len(counter))
+	copy(key, LeavesKey)
+	copy(key[len(LeavesKey):], []byte(adminaddress))
+	copy(key[len(LeavesKey):], []byte(counter))
+	return key
+}
+func LeaveStorinKeyId(counter string) []byte {
+	key := make([]byte, len(LeavesStoringKey)+len(counter))
+	copy(key, LeavesStoringKey)
+	copy(key[len(LeavesStoringKey):], []byte(counter))
+	return key
+}

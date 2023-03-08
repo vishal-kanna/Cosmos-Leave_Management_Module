@@ -50,6 +50,7 @@ message ApplyLeaveRequest {
     google.protobuf.Timestamp from = 4  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
     
     google.protobuf.Timestamp to = 5  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+    
 }
 
 message ApplyLeaveResponse {
@@ -88,4 +89,18 @@ message Student {
     
     // id is a unique student id.
     string id = 3;
+}
+message LeaveRequest {
+    string signer=1;
+
+    string address = 2;
+    
+    string reason = 3;
+    
+    google.protobuf.Timestamp from = 4  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+    
+    google.protobuf.Timestamp to = 5  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+    int64 leaveid=6;
+    
+    LeaveStatus status = 7;
 }

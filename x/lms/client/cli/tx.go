@@ -119,7 +119,7 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 		Long: `Student can apply the leave,
 			[studentid] | [Reason] | [from] | [to]
 		`,
-		Example: "./simd tx lms applleave [studentid] [reason] [from] [to] --from validator-key --chain-id testnet",
+		Example: "./simd tx lms applyleave [studentid] [reason] [from] [to] --from validator-key --chain-id testnet",
 
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)

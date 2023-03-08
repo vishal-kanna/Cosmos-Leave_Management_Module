@@ -34,7 +34,7 @@ message GetLeaveStatusResponse{
 }
 message ListAllTheLeavesRequest{}
 message ListAllTheLeavesResponse{
-    repeated AcceptLeaveRequest leaves=1;
+    repeated LeaveRequest leaves=1;
 }
 message ListAllTheStudentResponse{
     repeated Student students=1;

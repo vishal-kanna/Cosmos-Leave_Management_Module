@@ -86,62 +86,118 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 		applyleavemarshalldata, err := k.cdc.Marshal(req)
 		if err != nil {
 			log.Println(err)
-		} else {
-			var counter int
-			counter = 0
-			//val stores the byte array if the corressponding key is present in the prefix LeaveKeyId
-			val := store.Get(types.LeaveKeyStoreId(req.Address))
-			if val == nil {
-				counter++
-				//marshall the counter
-				InttoString := strconv.Itoa(counter)
-				// marhshallcounter, err := k.cdc.Marshal(InttoString)
+		}
+		//here signer means admin
+		leavecounter := store.Get(types.LeaveCounterStoreId(req.Address))
+		if leavecounter == nil {
+			fmt.Println("the leavecounter===========0")
+			//if leavecounter nil means there is no counter in the store
+			c := 1
+			InttoString1 := strconv.Itoa(c)
+			store.Set(types.LeaveCounterStoreId(req.Signer), []byte(InttoString1))
+			//apply leave based on the counter
+			// c = c + 1
+			fmt.Println("the leavecounter===========1", c)
 
-				//to better understand LeaveStoreId store the respective studnet leave data
-				store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
-				//Need to change this because here Im manually converting the string into the
-				//to better understand LeaveKeyStoreId store the respective studnet counter
-				leaveapply := &types.AcceptLeaveRequest{
-					Admin:     req.Signer,
-					StudentId: req.Address,
-					Status:    types.LeaveStatus_STATUS_UNDEFINED,
-				}
-				leavemarshall, err := k.cdc.Marshal(leaveapply)
-				if err != nil {
-					panic(err)
-				}
-				store.Set(types.AllLeavesStoreId(req.Address), leavemarshall)
-				store.Set(types.LeaveKeyStoreId(req.Address), []byte(InttoString))
-			} else {
-				//if we do not get the nil means the student address already present in the array
-				//so we need to get the student id from the leaveKeyStoreId and increment the counter
-				val := store.Get(types.LeaveKeyStoreId(req.Address))
-				ans := string(val)
-				a, err := strconv.Atoi(ans)
-				if err != nil {
-					log.Println(err)
-				} else {
-					a++
-					//convert it to string
-					s := strconv.Itoa(a)
-					store.Set(types.LeaveKeyStoreId(req.Address), []byte(s))
-					store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
-					leaveapply := &types.AcceptLeaveRequest{
-						Admin:     req.Signer,
-						StudentId: req.Address,
-						Status:    types.LeaveStatus_STATUS_UNDEFINED,
-					}
-					leavemarshall, err := k.cdc.Marshal(leaveapply)
-					if err != nil {
-						panic(err)
-					}
-					// fmt.Println("its storing the data")
-					store.Set(types.AllLeavesStoreId(req.Address), leavemarshall)
-					// fmt.Println("its storing the data")
-					// fmt.Println("its storing the data")
-
-				}
+			req1 := &types.LeaveRequest{
+				Leaveid: int64(c),
+				Address: req.Address,
+				Signer:  req.Signer,
+				From:    req.From,
+				To:      req.To,
 			}
+			data, err := k.cdc.Marshal(req1)
+			if err != nil {
+				panic(err)
+			}
+
+			store.Set(types.LeaveStorinKeyId(InttoString1), data)
+		} else {
+			fmt.Println("the leavecounter===========2", leavecounter)
+
+			leavecounterstring := string(leavecounter)
+			fmt.Println("the leae ", leavecounterstring)
+			// a, err := strconv.Atoi(ans)
+			leavecounterint, err := strconv.Atoi(leavecounterstring)
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println("the leavecounter===========2", leavecounterint)
+			leavecounterint = leavecounterint + 1
+			fmt.Println("the leavecounter===========2", leavecounterint)
+			req1 := &types.LeaveRequest{
+				Leaveid: int64(leavecounterint),
+				Address: req.Address,
+				Signer:  req.Signer,
+				From:    req.From,
+				To:      req.To,
+			}
+			data, err := k.cdc.Marshal(req1)
+			if err != nil {
+				panic(err)
+			}
+			leavecounterstring = strconv.Itoa(leavecounterint)
+			fmt.Println("the req is", req1)
+			store.Set(types.LeaveStorinKeyId(leavecounterstring), data)
+			d := store.Get(types.LeaveStorinKeyId(leavecounterstring))
+			var r types.LeaveRequest
+			k.cdc.Unmarshal(d, &r)
+			fmt.Println("the get value is", r)
+			// var counter int
+			// counter = 0
+			// //val stores the byte array if the corressponding key is present in the prefix LeaveKeyId
+			// val := store.Get(types.LeaveKeyStoreId(req.Address))
+			// if val == nil {
+			// 	counter++
+			// 	//marshall the counter
+			// 	InttoString := strconv.Itoa(counter)
+			// 	// marhshallcounter, err := k.cdc.Marshal(InttoString)
+
+			// 	//to better understand LeaveStoreId store the respective studnet leave data
+			// 	store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
+			// 	//Need to change this because here Im manually converting the string into the
+			// 	//to better understand LeaveKeyStoreId store the respective studnet counter
+			// 	leaveapply := &types.AcceptLeaveRequest{
+			// 		Admin:     req.Signer,
+			// 		StudentId: req.Address,
+			// 		Status:    types.LeaveStatus_STATUS_UNDEFINED,
+			// 	}
+			// 	leavemarshall, err := k.cdc.Marshal(leaveapply)
+			// 	if err != nil {
+			// 		panic(err)
+			// 	}
+			// 	store.Set(types.AllLeavesStoreId(req.Address), leavemarshall)
+			// 	store.Set(types.LeaveKeyStoreId(req.Address), []byte(InttoString))
+			// } else {
+			// 	//if we do not get the nil means the student address already present in the array
+			// 	//so we need to get the student id from the leaveKeyStoreId and increment the counter
+			// 	val := store.Get(types.LeaveKeyStoreId(req.Address))
+			// 	ans := string(val)
+			// 	a, err := strconv.Atoi(ans)
+			// 	if err != nil {
+			// 		log.Println(err)
+			// 	} else {
+			// 		a++
+			// 		//convert it to string
+			// 		s := strconv.Itoa(a)
+			// 		store.Set(types.LeaveKeyStoreId(req.Address), []byte(s))
+			// 		store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
+			// 		leaveapply := &types.AcceptLeaveRequest{
+			// 			Admin:     req.Signer,
+			// 			StudentId: req.Address,
+			// 			Status:    types.LeaveStatus_STATUS_UNDEFINED,
+			// 		}
+			// 		leavemarshall, err := k.cdc.Marshal(leaveapply)
+			// 		if err != nil {
+			// 			panic(err)
+			// 		}
+			// 		// fmt.Println("its storing the data")
+			// 		store.Set(types.AllLeavesStoreId(req.Address), leavemarshall)
+			// 		// fmt.Println("its storing the data")
+			// 		// fmt.Println("its storing the data")
+
+			// 	}
+			// }
 			store.Set(types.LeaveStoreId(req.Address), applyleavemarshalldata)
 		}
 	}
@@ -231,13 +287,21 @@ func (k Keeper) GetAllStudents(ctx sdk.Context, req *types.ListAllTheStudentRequ
 
 	return students
 }
-func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) []*types.AcceptLeaveRequest {
+func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest) []*types.LeaveRequest {
 	store := ctx.KVStore(k.storeKey)
-	var leaves []*types.AcceptLeaveRequest
-	itr := sdk.KVStorePrefixIterator(store, types.AllLeavesKey)
+	var leaves []*types.LeaveRequest
+	fmt.Println("hello=======================================")
+	itr := sdk.KVStorePrefixIterator(store, types.LeavesStoringKey)
+	fmt.Println("hello=======================================000000")
+	defer itr.Close()
+
 	for ; itr.Valid(); itr.Next() {
-		var leave types.AcceptLeaveRequest
+		fmt.Println("hello=======================================")
+
+		var leave types.LeaveRequest
 		k.cdc.Unmarshal(itr.Value(), &leave)
+
+		fmt.Println("the leaves are ", leave)
 		leaves = append(leaves, &leave)
 	}
 	return leaves
