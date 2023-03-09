@@ -37,16 +37,13 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 	}
 	leavecounter := store.Get(types.LeaveCounterStoreId(req.Studentid))
 	if leavecounter == nil {
-		fmt.Println("leavecounter============", leavecounter)
 		//if leavecounter nil means there is no counter in the store
 		c := 1
 		InttoString1 := strconv.Itoa(c)
 		store.Set(types.LeaveCounterStoreId(req.Studentid), []byte(InttoString1))
 	} else {
-		fmt.Println("leavecounter============", leavecounter)
 
 		leavecounterstring := string(leavecounter)
-		fmt.Println("leavecounter============", leavecounterstring)
 
 		// a, err := strconv.Atoi(ans)
 		leavecounterint, err := strconv.Atoi(leavecounterstring)
@@ -58,7 +55,6 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 	}
 	counter := store.Get(types.LeaveCounterStoreId(req.Studentid))
 	counterint, err := strconv.Atoi(string(counter))
-	fmt.Println("leavecounter============counterint", counterint)
 
 	if err != nil {
 		panic(err)
@@ -102,7 +98,7 @@ func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) err
 				panic(e)
 			}
 			store.Set(types.LeaveStorinKeyId(req.StudentId, req.LeaveId), d)
-			store.Set(types.AllLeavesStoreId(string(reqdata)), d)
+			// store.Set(types.AllLeavesStoreId(string(reqdata)), d)
 		}
 	}
 	return nil
@@ -186,10 +182,10 @@ func (k Keeper) GetAllLeaves(ctx sdk.Context, req *types.ListAllTheLeavesRequest
 	return leaves
 }
 
-func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string) types.AcceptLeaveRequest {
+func (k Keeper) GetleaveStatus(ctx sdk.Context, studentaddress string, leaveid string) types.LeaveRequest {
 	store := ctx.KVStore(k.storeKey)
-	var leave types.AcceptLeaveRequest
-	res := store.Get(types.AllLeavesStoreId(studentaddress))
+	var leave types.LeaveRequest
+	res := store.Get(types.LeaveStorinKeyId(studentaddress, leaveid))
 	if res == nil {
 		fmt.Println("no results")
 	} else {

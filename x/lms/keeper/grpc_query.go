@@ -31,7 +31,7 @@ func (k Keeper) ListAllTheStudent(goCtx context.Context, req *types.ListAllTheSt
 }
 func (k Keeper) GetLeaveStatus(goctx context.Context, req *types.GetLeaveStatusRequest) (*types.GetLeaveStatusResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goctx)
-	res := k.GetleaveStatus(ctx, req.Studentaddress)
+	res := k.GetleaveStatus(ctx, req.Studentaddress, req.Leaveid)
 	res1 := types.GetLeaveStatusResponse{
 		Status: &res,
 	}

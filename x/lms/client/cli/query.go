@@ -91,8 +91,10 @@ func ListStudentLeaveStatus() *cobra.Command {
 			}
 			queryClient := types.NewQueryClient(clientCtx)
 			studentaddress := args[0]
+			leaveid := args[1]
 			params := &types.GetLeaveStatusRequest{
 				Studentaddress: studentaddress,
+				Leaveid:        leaveid,
 			}
 			res, err := queryClient.GetLeaveStatus(cmd.Context(), params)
 			return clientCtx.PrintProto(res)

@@ -28,9 +28,10 @@ message GetadminResponse{
 }
 message GetLeaveStatusRequest{
     string studentaddress=1;
+    string leaveid=2;
 }
 message GetLeaveStatusResponse{
-    AcceptLeaveRequest status=1;
+    LeaveRequest status=1;
 }
 message ListAllTheLeavesRequest{}
 message ListAllTheLeavesResponse{
