@@ -56,7 +56,7 @@ func (k Keeper) RegisterAdmin(goctx context.Context, req *types.RegisterAdminReq
 func (k Keeper) ApplyLeave(goctx context.Context, req *types.ApplyLeaveRequest) (*types.ApplyLeaveResponse, error) {
 	// k.AcceptLeave(ctx, req)
 	ctx := sdk.UnwrapSDKContext(goctx)
-	if req.Address == "" {
+	if req.Studentid == "" {
 		return nil, types.ErrAddress
 	}
 	if req.From == nil {

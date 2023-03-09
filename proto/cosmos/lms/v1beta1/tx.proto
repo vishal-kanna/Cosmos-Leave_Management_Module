@@ -43,7 +43,7 @@ message AddStudentResponse{}
 message ApplyLeaveRequest {
     string signer=1;
 
-    string address = 2;
+    string studentid = 2;
     
     string reason = 3;
     
@@ -72,8 +72,8 @@ message AcceptLeaveRequest {
     string admin = 2;
     
     string student_id = 3;
-    
-    LeaveStatus status = 4;
+    string leave_id=4;
+    LeaveStatus status = 5;
 }
 
 message AcceptLeaveResponse {

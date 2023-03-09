@@ -1,6 +1,7 @@
 package types
 
 import (
+	"strconv"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -60,8 +61,8 @@ func (msg AddStudentRequest) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{fromAddress}
 }
 
-func NewApplyLeaveRequest(signer string, address string, reason string, from time.Time, to time.Time) *ApplyLeaveRequest {
-	return &ApplyLeaveRequest{Signer: signer, Address: address, Reason: reason, From: &from, To: &to}
+func NewApplyLeaveRequest(signer string, studentid string, reason string, from time.Time, to time.Time) *ApplyLeaveRequest {
+	return &ApplyLeaveRequest{Signer: signer, Studentid: studentid, Reason: reason, From: &from, To: &to}
 }
 func (msg ApplyLeaveRequest) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Signer); err != nil {
@@ -79,8 +80,17 @@ func (msg ApplyLeaveRequest) GetSigners() []sdk.AccAddress {
 	fromAddress, _ := sdk.AccAddressFromBech32(msg.Signer)
 	return []sdk.AccAddress{fromAddress}
 }
-func NewAcceptLeaveRequest(signer string, adminaddress string, studentid string) *AcceptLeaveRequest {
-	return &AcceptLeaveRequest{Signer: signer, Admin: adminaddress, StudentId: studentid}
+func NewAcceptLeaveRequest(signer string, adminaddress string, studentid string, leaveid string, status string) *AcceptLeaveRequest {
+	s, _ := strconv.Atoi(status)
+	var st LeaveStatus
+	if s == 0 {
+		st = 0
+	} else if s == 1 {
+		st = 1
+	} else {
+		st = 2
+	}
+	return &AcceptLeaveRequest{Signer: signer, Admin: adminaddress, StudentId: studentid, LeaveId: leaveid, Status: st}
 }
 
 func (msg AcceptLeaveRequest) GetSignBytes() []byte {

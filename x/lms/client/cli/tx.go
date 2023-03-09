@@ -147,12 +147,12 @@ func NewApplyLeaveRequestCmd() *cobra.Command {
 func NewAcceptLeaveRequestCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "acceptleave",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(3),
 		Short: "Accept the leave",
 		Long: `admin accepts the leave req
 			[StudentID]		
 		`,
-		Example: "./simd tx lms acceptleave [studentid] --from validator-key --chain-id testnet",
+		Example: "./simd tx lms acceptleave [studentid] [leaveid] [status]--from validator-key --chain-id testnet",
 
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -162,7 +162,9 @@ func NewAcceptLeaveRequestCmd() *cobra.Command {
 			Signer := clientCtx.GetFromAddress()
 			AdminAddress := clientCtx.GetFromAddress()
 			Studentid := args[0]
-			msg := types.NewAcceptLeaveRequest(Signer.String(), AdminAddress.String(), Studentid)
+			leaveid := args[1]
+			status := args[2]
+			msg := types.NewAcceptLeaveRequest(Signer.String(), AdminAddress.String(), Studentid, leaveid, status)
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}

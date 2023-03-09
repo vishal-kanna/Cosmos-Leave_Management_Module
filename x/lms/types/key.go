@@ -58,9 +58,10 @@ func LeaveCounterStoreId(adminaddress string) []byte {
 	copy(key[len(LeavesKey):], []byte(adminaddress))
 	return key
 }
-func LeaveStorinKeyId(counter string) []byte {
-	key := make([]byte, len(LeavesStoringKey)+len(counter))
-	copy(key, LeavesKey)
-	copy(key[len(LeavesKey):], []byte(counter))
+func LeaveStorinKeyId(studentid string, counter string) []byte {
+	key := make([]byte, len(LeavesStoringKey)+len(counter)+len(studentid))
+	copy(key, LeavesStoringKey)
+	copy(key[len(LeavesStoringKey):], []byte(counter))
+	copy(key[len(LeavesStoringKey)+len(counter):], []byte(studentid))
 	return key
 }
