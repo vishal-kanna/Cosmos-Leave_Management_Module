@@ -54,6 +54,7 @@ message ApplyLeaveRequest {
 }
 
 message ApplyLeaveResponse {
+    string leaveid=1;
 
 }
 

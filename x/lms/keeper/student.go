@@ -26,14 +26,14 @@ func (k Keeper) AdminRegister(ctx sdk.Context, req *types.RegisterAdminRequest) 
 
 	return nil
 }
-func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool {
+func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) (types.ApplyLeaveResponse, error) {
 	store := ctx.KVStore(k.storeKey)
 	//checking whether student is added by the admin or not
 	//if student is added then we will get the byte array
 	val := store.Get(types.StudentStoreId(req.Studentid))
 	if val == nil {
 		fmt.Println("Student did not added by the admin")
-		return false
+		return types.ApplyLeaveResponse{}, types.ErrStudentIdDoesNotExist
 	}
 	leavecounter := store.Get(types.LeaveCounterStoreId(req.Studentid))
 	if leavecounter == nil {
@@ -68,12 +68,18 @@ func (k Keeper) ApplyLeaves(ctx sdk.Context, req *types.ApplyLeaveRequest) bool 
 		To:      req.To,
 		Status:  types.LeaveStatus_STATUS_UNDEFINED,
 	}
-	fmt.Println("the req is", req1)
 	data, err := k.cdc.Marshal(req1)
 	leavecounterstring := strconv.Itoa(counterint)
 	store.Set(types.LeaveStorinKeyId(req.Studentid, leavecounterstring), data)
 
-	return true
+	response := types.ApplyLeaveResponse{Leaveid: leavecounterstring}
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			sdk.EventTypeMessage,
+			sdk.NewAttribute("leaveid:", response.Leaveid),
+		),
+	)
+	return response, nil
 }
 
 func (k Keeper) AcceptLeaves(ctx sdk.Context, req *types.AcceptLeaveRequest) error {

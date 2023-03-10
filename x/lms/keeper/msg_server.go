@@ -10,6 +10,8 @@ package keeper
 import (
 	"clms/x/lms/types"
 	"context"
+	"fmt"
+	"log"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -30,7 +32,6 @@ func (k Keeper) AddStudent(goctx context.Context, req *types.AddStudentRequest) 
 	}
 	res := k.AddStudents(ctx, req)
 	if res == true {
-
 		return &types.AddStudentResponse{}, nil
 	} else {
 		return nil, types.ErrStudentAlreadyExist
@@ -68,12 +69,13 @@ func (k Keeper) ApplyLeave(goctx context.Context, req *types.ApplyLeaveRequest) 
 	if req.Reason == "" {
 		return nil, types.ErrEmptyReason
 	}
-	ans := k.ApplyLeaves(ctx, req)
-	if ans == true {
-		return &types.ApplyLeaveResponse{}, nil
+	ans, err := k.ApplyLeaves(ctx, req)
+	if err != nil {
+		return &types.ApplyLeaveResponse{}, err
 	}
-	// return nil, false
-	return nil, nil
+	fmt.Println("the response is+++++++++++++++++++++++++++++++++", ans)
+	return &ans, nil
+	// return nil, nil
 
 }
 func (k Keeper) AcceptLeave(goctx context.Context, req *types.AcceptLeaveRequest) (*types.AcceptLeaveResponse, error) {
@@ -84,6 +86,10 @@ func (k Keeper) AcceptLeave(goctx context.Context, req *types.AcceptLeaveRequest
 	if req.StudentId == "" {
 		return nil, types.ErrStudentDetails
 	}
-	k.AcceptLeaves(ctx, req)
+	err := k.AcceptLeaves(ctx, req)
+	if err != nil {
+		log.Println("error is", err)
+		return nil, err
+	}
 	return &types.AcceptLeaveResponse{}, nil
 }
