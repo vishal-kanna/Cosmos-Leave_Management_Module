@@ -2,6 +2,7 @@ syntax="proto3";
 package cosmos.lms.v1beta1;
 option go_package="x/lms/types";
 import "google/protobuf/timestamp.proto";
+import "gogoproto/gogo.proto";
 service Msg {
     // RegisterAdmin adds a new admin
     rpc RegisterAdmin(RegisterAdminRequest) returns (RegisterAdminResponse);
@@ -18,36 +19,42 @@ service Msg {
 
 message RegisterAdminRequest {
     // address is the account address of the admin.
-    string address = 1;
+    string signer=1;
+
+    string address = 2;
     
     // name is the admin name
-    string name = 2;
+    string name = 3;
 }
 
 message RegisterAdminResponse{}
 
 message AddStudentRequest {
     // admin is the account address of the admin
-    string admin = 1;
+    string signer=1;
+    string admin = 2;
     
     // students is the list of Student.
-    repeated Student students = 2;
+    repeated Student students = 3;
 }
 
 message AddStudentResponse{}
 
 message ApplyLeaveRequest {
+    string signer=1;
+
+    string studentid = 2;
     
-    string address = 1;
+    string reason = 3;
     
-    string reason = 2;
+    google.protobuf.Timestamp from = 4  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
     
-    google.protobuf.Timestamp from = 3;
+    google.protobuf.Timestamp to = 5  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
     
-    google.protobuf.Timestamp to = 4;
 }
 
 message ApplyLeaveResponse {
+    string leaveid=1;
 
 }
 
@@ -61,11 +68,13 @@ enum LeaveStatus {
 
 message AcceptLeaveRequest {
 
-    string admin = 1;
+    string signer=1;
+
+    string admin = 2;
     
-    uint64 leave_id = 2;
-    
-    LeaveStatus status = 3;
+    string student_id = 3;
+    string leave_id=4;
+    LeaveStatus status = 5;
 }
 
 message AcceptLeaveResponse {
@@ -81,4 +90,18 @@ message Student {
     
     // id is a unique student id.
     string id = 3;
+}
+message LeaveRequest {
+    string signer=1;
+
+    string address = 2;
+    
+    string reason = 3;
+    
+    google.protobuf.Timestamp from = 4  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+    
+    google.protobuf.Timestamp to = 5  [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+    int64 leaveid=6;
+    
+    LeaveStatus status = 7;
 }

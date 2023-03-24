@@ -8,10 +8,15 @@ import (
 
 type Keeper struct {
 	storeKey storetypes.StoreKey
-																																																																							
+
 	cdc codec.Codec
 }
 
-// func (k BaseKeeper) SetStudent(ctx sdk.Context, name string, id string, email string, passwd string) {
-// 	store :=
-// }
+//NewKeeper creates a new Student Keeper instance
+
+func NewKeeper(key storetypes.StoreKey, cdc codec.Codec) Keeper {
+	return Keeper{
+		cdc:      cdc,
+		storeKey: key,
+	}
+}

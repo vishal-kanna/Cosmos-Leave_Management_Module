@@ -1,7 +1,9 @@
 syntax="proto3";
 package cosmos.lms.v1beta1;
 option go_package="x/lms/types";    
-import "google/api/annotations.proto" ;                                                                                                                                                                                                                                                                                                                                                                       
+import "google/api/annotations.proto" ;     
+import "cosmos/lms/v1beta1/tx.proto";
+
 // import "cosmos/query/v1/query.proto";
 service query{
     rpc ListAllTheLeaves(ListAllTheLeavesRequest)returns(ListAllTheLeavesResponse){
@@ -9,10 +11,33 @@ service query{
         option (google.api.http).get   = "/cosmos/lms/v1beta1/leaveid";
     }
     rpc ListAllTheStudent(ListAllTheStudentRequest)returns(ListAllTheStudentResponse){
+        option (google.api.http).get   = "/cosmos/lms/v1beta1/studentsid";
+    }
+    rpc GetLeaveStatus(GetLeaveStatusRequest)returns(GetLeaveStatusResponse){
         option (google.api.http).get   = "/cosmos/lms/v1beta1/studentid";
     }
+    rpc GetAdmin(GetadminRequest)returns (GetadminResponse){
+        option (google.api.http).get   = "/cosmos/lms/v1beta1/admin";   
+    }
+}
+message GetadminRequest{
+
+}
+message GetadminResponse{
+    repeated RegisterAdminRequest admins=1;
+}
+message GetLeaveStatusRequest{
+    string studentaddress=1;
+    string leaveid=2;
+}
+message GetLeaveStatusResponse{
+    LeaveRequest status=1;
 }
 message ListAllTheLeavesRequest{}
-message ListAllTheLeavesResponse{}
-message ListAllTheStudentResponse{}
+message ListAllTheLeavesResponse{
+    repeated LeaveRequest leaves=1;
+}
+message ListAllTheStudentResponse{
+    repeated Student students=1;
+}
 message ListAllTheStudentRequest{}
